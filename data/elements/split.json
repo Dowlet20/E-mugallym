@@ -1,0 +1,37 @@
+{
+  "splitOne": [
+    {
+      "tag": "University Status",
+      "title": "University Overview.",
+      "subTitle": "Campus Information",
+      "img": "/images/split/split-01.jpg",
+      "imgIcon": "/images/shape/school.png",
+      "desc": "Karýeranyňyza başlamak üçin öwrenip, taýýarlanyň, bu işleýiş üçin goldawly, döredijilikli we professional bir gurşawda boluň. Bu gurşaw size pragtiki ukyplary öwrenmäge, senagat habarlaşygyny döretmäge we üstünlik üçin zerur tejribäni gazanmaga mümkinçilik berer.",
+      "list": [
+        {
+          "text": "- Doug DeMarco, Design Prototyping Manager"
+        },
+        {
+          "text": "- 108 million paying subscribers"
+        },
+        {
+          "text": "- Over 1.7 billion hours of music played monthly"
+        },
+        {
+          "text": "- 4,000+ employees working across 16 offices"
+        }
+      ]
+    }
+  ],
+  "splitTwo": [
+    {
+      "tag": "Biziň işimiz",
+      "title": "Karýeranyňyzy guruň we durmuşyňyzy täze derejä göteriň.",
+      "subTitle": "Campus Information",
+      "img": "/images/split/split-01.jpg",
+      "imgTwo": "/images/others/video-01.jpg",
+      "imgIcon": "/images/icons/youtube.png",
+      "desc": "Karýeranyňyza başlamak üçin öwrenip, taýýarlanyň, bu işleýiş üçin goldawly, döredijilikli we professional bir gurşawda boluň. Bu gurşaw size pragtiki ukyplary öwrenmäge, senagat habarlaşygyny döretmäge we üstünlik üçin zerur tejribäni gazanmaga mümkinçilik berer."
+    }
+  ]
+}

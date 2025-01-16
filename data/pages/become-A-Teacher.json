@@ -1,0 +1,52 @@
+{
+  "becomeATeacher": [
+    {
+      "tag": "MUGALLYM",
+      "title": "Mugallym hökmünde ýüz tutuň",
+      "desc": "Mugallym bolmagyň düzgünleri bilen tanyşyň!",
+      "body": [
+        {
+          "text": "Mugallym boluň",
+          "isActive": false,
+          "tab": "home-tab-4",
+          "target": "home-4",
+          "controls": "home",
+          "desc": "..."
+        },
+        {
+          "text": "Mugallymyň düzgünleri.",
+          "isActive": true,
+          "tab": "profile-tab-4",
+          "target": "profile-4",
+          "controls": "profile",
+          "desc": "..."
+        },
+        {
+          "text": "Kurslardan başlaň.",
+          "isActive": false,
+          "tab": "contact-tab-4",
+          "target": "contact-4",
+          "controls": "contact",
+          "desc": "..."
+        }
+      ],
+      "gallery": [
+        {
+          "img": "/images/banner/gallery-banner-01.jpg",
+          "width": 1305,
+          "height": 600
+        },
+        {
+          "img": "/images/banner/gallery-banner-03.jpg",
+          "width": 1305,
+          "height": 600
+        },
+        {
+          "img": "/images/banner/gallery-banner-02.jpg",
+          "width": 1305,
+          "height": 600
+        }
+      ]
+    }
+  ]
+}

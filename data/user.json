@@ -1,0 +1,50 @@
+{
+  "user": [
+    {
+      "name": "Rainbow Dev",
+      "img": "/images/team/avatar.jpg",
+      "userList": [
+        {
+          "icon": "feather-home",
+          "text": "Dolandyryş panelim",
+          "link": "/instructor/instructor-dashboard"
+        },
+        {
+          "icon": "feather-bookmark",
+          "text": "Bellik",
+          "link": "#"
+        },
+        {
+          "icon": "feather-shopping-bag",
+          "text": "Bellenen kurslar",
+          "link": "/instructor/instructor-enrolled-course"
+        },
+        {
+          "icon": "feather-heart",
+          "text": "Halanlarym",
+          "link": "/instructor/instructor-wishlist"
+        },
+        {
+          "icon": "feather-star",
+          "text": "Teswir",
+          "link": "/instructor/instructor-reviews"
+        },
+        {
+          "icon": "feather-list",
+          "text": "Soragnamalar",
+          "link": "/instructor/instructor-my-quiz-attempts"
+        },
+        {
+          "icon": "feather-clock",
+          "text": "Sargyt taryhy",
+          "link": "/instructor/instructor-order-history"
+        },
+        {
+          "icon": "feather-message-square",
+          "text": "Sorag & Jogap",
+          "link": "/instructor/instructor-quiz-attempts"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "siderbar": [
+    {
+      "link": "/instructor-dashboard",
+      "text": "Dolandyryş paneli",
+      "icon": "feather-home"
+    },
+    {
+      "link": "/instructor-profile",
+      "text": "Meniň profilim",
+      "icon": "feather-user"
+    },
+    {
+      "link": "/instructor/instructor-enrolled-course",
+      "text": "Bellenen kurslar",
+      "icon": "feather-book-open"
+    },
+    {
+      "link": "/instructor/instructor-wishlist",
+      "text": "Halanlarym",
+      "icon": "feather-bookmark"
+    },
+    {
+      "link": "/instructor/instructor-reviews",
+      "text": "Teswir",
+      "icon": "feather-star"
+    },
+    {
+      "link": "/instructor/instructor-quiz-attempts",
+      "text": "Soragnamalar",
+      "icon": "feather-help-circle"
+    },
+    {
+      "link": "/instructor/instructor-order-history",
+      "text": "Sargyt taryhy",
+      "icon": "feather-shopping-bag"
+    },
+    {
+      "link": "/instructor/instructor-personal-courses",
+      "text": "Meniň kurslarym",
+      "icon": "feather-monitor"
+    },
+    {
+      "link": "/instructor/instructor-announcements",
+      "text": "Bildirişler",
+      "icon": "feather-volume-2"
+    },
+    {
+      "link": "/instructor/instructor-quiz-attempts",
+      "text": "Test synanyşyklary",
+      "icon": "feather-message-square"
+    },
+    {
+      "link": "/instructor/instructor-assignments",
+      "text": "Berlen ýumuşlar",
+      "icon": "feather-list"
+    },
+    {
+      "link": "/instructor/instructor-settings",
+      "text": "Sazlamalar",
+      "icon": "feather-settings"
+    },
+    {
+      "link": "/",
+      "text": "Çykyş",
+      "icon": "feather-log-out"
+    }
+  ]
+}

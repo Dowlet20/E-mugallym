@@ -1,0 +1,49 @@
+{
+  "siderbar": [
+    {
+      "link": "/student/student-dashboard",
+      "text": "Dolandyryş paneli",
+      "icon": "feather-home"
+    },
+    {
+      "link": "/student/student-profile",
+      "text": "Meniň profilim",
+      "icon": "feather-user"
+    },
+    {
+      "link": "/student/student-enrolled-course",
+      "text": "Bellenen kurslar",
+      "icon": "feather-book-open"
+    },
+    {
+      "link": "/student/student-wishlist",
+      "text": "Halanlarym",
+      "icon": "feather-bookmark"
+    },
+    {
+      "link": "/student/student-reviews",
+      "text": "Teswir",
+      "icon": "feather-star"
+    },
+    {
+      "link": "/student/student-quiz-attempts",
+      "text": "Soragnamalar",
+      "icon": "feather-help-circle"
+    },
+    {
+      "link": "/student/student-order-history",
+      "text": "Sargyt taryhy",
+      "icon": "feather-shopping-bag"
+    },
+    {
+      "link": "/student/student-settings",
+      "text": "Sazlamalar",
+      "icon": "feather-settings"
+    },
+    {
+      "link": "/",
+      "text": "Çykyş",
+      "icon": "feather-log-out"
+    }
+  ]
+}

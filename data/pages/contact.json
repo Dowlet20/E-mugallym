@@ -1,0 +1,27 @@
+{
+  "contactOne": [
+    {
+      "title": "Telefon belgiler",
+      "numOne": "+993 12 945155",
+      "numTwo": "+993 65 801507",
+      "icon": "feather-headphones",
+      "address": ""
+    },
+    {
+      "title": "E-poçta salgymyz",
+      "mailOne": "emugallym@gmail.com",
+      "mailTwo": "info@tducentre.edu.tm",
+      "icon": "feather-mail",
+      "numOne": "",
+      "address": "",
+      "numTwo": ""
+    },
+    {
+      "title": "Biziň ýerleşýän ýerimiz",
+      "address": "744000, Türkmenistan, Aşgabat şäheri, Beýik Saparmyrat Türkmenbaşy şaýoly, 31",
+      "icon": "feather-map-pin",
+      "numOne": "",
+      "numTwo": ""
+    }
+  ]
+}
