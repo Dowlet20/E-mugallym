@@ -1,7 +1,7 @@
 import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
 import {useState} from "react";
-
+import {Ripple} from "react-css-spinners";
 const Login = () => {
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
@@ -10,12 +10,14 @@ const Login = () => {
   const [usernameRegister, setUsernameRegister] = useState("");
   const [passwordRegister, setPasswordRegister] = useState("");
   const [confirmPassword, setConfirmPassord] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     if (!emailLogin || !passwordLogin) {
       setError('Doly doldurmaly');
@@ -38,6 +40,7 @@ const Login = () => {
       console.error(error);
       setError(error.response?.data?.message || 'Içeri girmekde ýalňyşlyk')
     }  finally {
+      setLoading(false);
     }
 
   };
@@ -45,6 +48,8 @@ const Login = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     if (!usernameRegister || !passwordRegister || !emailRegister || !confirmPassword) {
         setError('Hemmesini doldur!');
@@ -71,15 +76,27 @@ const Login = () => {
       } catch (error) {
         setError(error.response?.data?.message || 'Agza bolmakda yalnyslyk')
       } finally {
-        
+        setLoading(false);
       }
     };
-
     
 
 
   return (
     <>
+      {loading && (
+          <div 
+            className="d-flex bg-transparent"  
+            style={{height: '100vh'}}
+          >
+            <Ripple
+              color="rgba(12,235,115,1)"
+              size={115}
+              thickness={7}
+              className="mx-auto align-self-center"
+            />
+          </div>
+      )}
       <div className="col-lg-6">
         <div className="rbt-contact-form contact-form-style-1 max-width-auto">
           <h3 className="title">Içeri girmek</h3>

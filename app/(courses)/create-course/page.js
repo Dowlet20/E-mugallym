@@ -2,15 +2,14 @@ import BackToTop from "@/app/backToTop";
 import CreateCoursePage from "./index";
 
 export const metadata = {
-  title: "Create  Course - Online Courses & Education NEXTJS14 Template",
-  description: "Online Courses & Education NEXTJS14 Template",
+  title: "E-Mugallym",
+  description: "E-Mugallym",
 };
 
 const CreateCourseLayout = () => {
   return (
     <>
       <CreateCoursePage />
-
       <BackToTop />
     </>
   );

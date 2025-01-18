@@ -14,7 +14,6 @@ import Pagination from "@/components/Common/Pagination";
 import Separator from "@/components/Common/Separator";
 import FooterOne from "@/components/Footer/Footer-One";
 
-import CourseDetails from "../../../data/course-details/courseData.json";
 import axiosInstance from "@/utils/axiosInstance";
 import {Ripple} from 'react-css-spinners'
 

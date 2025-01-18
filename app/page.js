@@ -1,20 +1,18 @@
-import BackToTop from "./backToTop";
-//import HomePage from "./01-main-demo/page";
-import { LanguageProvider } from "@/context/LanguageContext";
+import BackToTop from "@/app/backToTop";
+import CourseFilteTwoTogglePage from "./index";
 
 export const metadata = {
-  title: "E-Mugallym",  
+  title: "E-Mugallym",
   description: "E-Mugallym",
 };
 
-export default function Home() {
+const CourseFilteTwoToggleLayout = () => {
   return (
-    <main>
-      <LanguageProvider>
-        {/* <HomePage /> */}
-        <BackToTop />
-      </LanguageProvider>
-    </main>
+    <>
+      <CourseFilteTwoTogglePage />
+      <BackToTop />
+    </>
   );
-}
+};
 
+export default CourseFilteTwoToggleLayout;

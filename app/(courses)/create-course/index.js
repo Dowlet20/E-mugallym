@@ -15,6 +15,7 @@ import CreateCourse from "@/components/create-course/CreateCourse";
 
 const CreateCoursePage = () => {
   const router = useRouter();
+  
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -24,6 +25,7 @@ const CreateCoursePage = () => {
       }
     }
   }, [router]);
+  
   return (
     <>
       <Provider store={Store}>

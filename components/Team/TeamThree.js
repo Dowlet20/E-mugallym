@@ -5,23 +5,38 @@ import Link from "next/link";
 import TeamHead from "./TeamHead";
 
 import axiosInstance from "@/utils/axiosInstance_user";
-import TeamData from "../../data/elements/team.json";
+import { Ripple } from "react-css-spinners";
 
 const TeamThree = () => {
   const [users, setUsers] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
     const fetchData =async () => {
       try {
         const response = await axiosInstance.get("/api/user");
         setUsers(response.data);
+        setLoading(false);
       }
       catch (err) {
         console.error(err)
       }
     } 
     fetchData();
-  }, [])
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

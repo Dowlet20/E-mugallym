@@ -10,6 +10,7 @@ import {useRouter} from "next/navigation";
 import { useParams } from "next/navigation";
 import React from "react";
 import { base_URL } from "@/utils/axiosInstance";
+import { Ripple } from "react-css-spinners";
 
 import dynamic from 'next/dynamic'
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
@@ -21,6 +22,7 @@ const LessonPage = () => {
 
   const [lesson, setLesson] = useState({});
   const [lesson_title, setLesson_title] = useState('');
+  const [loading, setLoading] = useState(true);
 
 
 
@@ -29,7 +31,8 @@ const LessonPage = () => {
       try {
         const response = await axiosInstance.get(`/api/lesson/${lesson_slug}`);
         setLesson(response.data);
-        setLesson_title(response.data?.title)
+        setLesson_title(response.data?.title);
+        setLoading(false);
       } catch (err) {
         console.error(err);
       }
@@ -39,6 +42,19 @@ const LessonPage = () => {
       fetchData();
     }
   }, []);
+
+  if (loading) {
+    return (
+      <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

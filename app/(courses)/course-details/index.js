@@ -16,13 +16,15 @@ import FooterOne from "@/components/Footer/Footer-One";
 import CourseHead from "@/components/Course-Details/Course-Sections/course-head";
 import CourseDetailsOne from "@/components/Course-Details/CourseDetails-One";
 import CourseActionBottom from "@/components/Course-Details/Course-Sections/Course-Action-Bottom";
-import SimilarCourses from "@/components/Course-Details/Course-Sections/SimilarCourses";
 import axiosInstance from "@/utils/axiosInstance";
+import SimilarCourses from "@/components/Course-Details/Course-Sections/SimilarCourses";
+import { Ripple } from "react-css-spinners";
 
 
 const SingleCourse = ({ getParams }) => {
   const router = useRouter();
   const slug = getParams.courseId;
+  const [loading, setLoading] = useState(true);
 
   const [course, setCourse] = useState({});
   let getCourse;
@@ -40,7 +42,7 @@ const SingleCourse = ({ getParams }) => {
       try {
         const response = await axiosInstance.get(`/api/courses/${slug}/`);
         setCourse(response.data);
-        console.log(response.data);
+        setLoading(false);
       } catch (err) {
         console.log(err.message);
       }
@@ -49,7 +51,18 @@ const SingleCourse = ({ getParams }) => {
   },[]);
 
 
-  
+  if (loading) {
+    return (
+      <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+    );
+  }
 
   // useEffect(() => {
   //   if (!checkMatch && postId) {

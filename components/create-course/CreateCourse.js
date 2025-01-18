@@ -19,14 +19,43 @@ import QuizModal from "./QuizModals/QuizModal";
 import AssignmentModal from "./QuizModals/AssignmentModal";
 import UpdateModal from "./QuizModals/UpdateModal";
 import Lesson from "./lesson/Lesson";
+import AsyncSelect from 'react-select/async';
+import axiosInstance from "@/utils/axiosInstance";
+import { useAppContext } from "@/context/Context";
 
 const CreateCourse = () => {
+  const { isLightTheme, toggleTheme } = useAppContext();
   const fileInputRef = useRef(null);
-  const [sortVideo, setSortByVideo] = useState({
-    value: "Wideonyň çeşmesini saýlaň",
-    label: "Wideonyň çeşmesini saýlaň",
-  });
+  const [topicTitle, setTopicTitle] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  
+
+  
+  const loadOptions = async (inputValue) => {
+    const url = !inputValue ? "/api/courses" : `/api/courses/?search=${inputValue}`; 
+    
+    try {
+      
+      const response = await axiosInstance.get(url);
+      
+      const options = response.data.map(item=> ({
+        label: item.title,
+        value: item.id
+      }))
+
+      return options;
+      
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  };
+
+  const handleChange = selectedOption => {
+    setSelectedOption(selectedOption);
+  };
+  
   const previewImages = CreateCourseData.createCourse[0].landscape.filter(
     (item) => item.type === "preview"
   );
@@ -34,11 +63,6 @@ const CreateCourse = () => {
     (item) => item.type === "port"
   );
 
-  const sortByVideoOptions = [
-    { value: "Youtube", label: "Youtube" },
-    { value: "Vimeo", label: "Vimeo" },
-    { value: "Local", label: "Local" },
-  ];
 
   const handleImportClick = (e) => {
     e.preventDefault();
@@ -47,8 +71,133 @@ const CreateCourse = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
   };
-  return (
-    <>
+
+  // const darkModeStyles = {
+  //   control: (provided) => ({
+  //     ...provided,
+  //     backgroundColor: '#333',
+  //     borderColor: '#555',
+  //     color: '#fff',
+  //   }),
+  //   menu: (provided) => ({
+  //     ...provided,
+  //     backgroundColor: '#333',
+  //     color: '#fff',
+  //   }),
+  //   option: (provided, state) => ({
+  //     ...provided,
+  //     padding: '10px',
+  //     backgroundColor: state.isSelected ? '#4CAF50' : state.isFocused ? '#555' : '#333',
+  //     color: state.isSelected ? '#fff' : '#ddd',
+  //     cursor: 'pointer',
+  //   }),
+  //   placeholder: (provided) => ({
+  //     ...provided,
+  //     color: '#aaa',
+  //   }),
+  //   input: (provided) => ({
+  //     ...provided,
+  //     color: '#fff',
+  //   }),
+  //   singleValue: (provided) => ({
+  //     ...provided,
+  //     color: '#fff',
+  //   }),
+  //   indicatorSeparator: () => ({
+  //     display: 'none',
+  //   }),
+  //   dropdownIndicator: (provided) => ({
+  //     ...provided,
+  //     color: '#fff',
+  //   }),
+  // };
+
+  // const lightModeStyles = {
+  //   control: (provided) => ({
+  //     ...provided,
+  //     backgroundColor: '#fff',
+  //     borderColor: '#ccc',
+  //     color: '#333',
+  //   }),
+  //   menu: (provided) => ({
+  //     ...provided,
+  //     backgroundColor: '#fff',
+  //     color: '#333',
+  //   }),
+  //   option: (provided, state) => ({
+  //     ...provided,
+  //     padding: '10px',
+  //     backgroundColor: state.isSelected ? '#4CAF50' : state.isFocused ? '#e4e4e4' : '#fff',
+  //     color: state.isSelected ? '#fff' : '#333',
+  //     cursor: 'pointer',
+  //   }),
+  //   placeholder: (provided) => ({
+  //     ...provided,
+  //     color: '#888',
+  //   }),
+  //   input: (provided) => ({
+  //     ...provided,
+  //     color: '#333',
+  //   }),
+  //   singleValue: (provided) => ({
+  //     ...provided,
+  //     color: '#333',
+  //   }),
+  //   indicatorSeparator: () => ({
+  //     display: 'none',
+  //   }),
+  //   dropdownIndicator: (provided) => ({
+    //     ...provided,
+    //     color: '#333',
+    //   }),
+    // };
+    
+    
+    // const currentStyles = isDarkMode ? darkModeStyles : lightModeStyles;
+    const customStyles = {
+      control: (provided) => ({
+        ...provided,
+        height: '40px', // Set the height of the control (selector box)
+        minHeight: '40px', // Ensure it doesn't go below 40px height
+        display: 'flex',
+        alignItems: 'center', // Centers the content vertically inside the control
+        padding: '0 8px', // Optional: Adjust horizontal padding if needed
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        fontSize: '14px', // Optional: Adjust font size
+        display: 'flex', // Make the placeholder a flex item
+        alignItems: 'center', // Ensure the placeholder aligns vertically with the input
+        marginBottom:'10px'
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        fontSize: '14px', // Optional: Adjust the font size for the selected value
+        display: 'flex',
+        alignItems: 'center', // Centers the selected value vertically
+      }),
+      input: (provided) => ({
+        ...provided,
+        marginTop: '-10px', // Remove extra margins that could cause misalignment
+        display: 'flex',
+        alignItems: 'center',
+         // Center the input text vertically
+      }),
+      dropdownIndicator: (provided) => ({
+        ...provided,
+        padding: '0 8px', // Optional: Adjust padding around the dropdown triangle
+        paddingBottom:"10px",
+        display: 'flex', // Ensure the triangle is aligned with other elements
+        alignItems: 'center', // Vertically align the triangle
+      }),
+      indicatorSeparator: (provided) => ({
+        ...provided,
+        display: 'none', // Optional: Hide the indicator separator if you don't want it
+      }),
+    };
+    
+    return (
+      <>
       <div className="row g-5">
         <div className="col-lg-8">
           <div className="rbt-accordion-style rbt-accordion-01 rbt-accordion-06 accordion">
@@ -88,7 +237,7 @@ const CreateCourse = () => {
                     aria-expanded="false"
                     aria-controls="accCollapseTwo"
                   >
-                    Kursyň tanyşdyrylyş wideosy
+                    Kursa degişli topikleri döretmek
                   </button>
                 </h2>
                 <div
@@ -98,36 +247,73 @@ const CreateCourse = () => {
                   data-bs-parent="#tutionaccordionExamplea1"
                 >
                   <div className="accordion-body card-body rbt-course-field-wrapper rbt-default-form">
-                    <div className="course-field mb--20">
-                      <div className="rbt-modern-select bg-transparent height-45 mb--10">
-                        <Select
-                          instanceId="sortBySelect"
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={sortVideo}
-                          onChange={setSortByVideo}
-                          options={sortByVideoOptions}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="course-field mb--15">
-                      <label htmlFor="videoUrl">
-                        wideonyň salgysyny goýuň
-                      </label>
-                      <input
-                        id="videoUrl"
-                        type="text"
-                        placeholder="Add Your Video URL here."
+                    <div className="course-field mb--15"> 
+                    <div style={{
+                      padding:'20px'
+                    }}>
+                    <small 
+                      className="d-block mt_dec--5"
+                      style={{
+                        marginLeft:'20px'
+                      }}
+                    >
+                      <i className="feather-info"></i><span>  </span> 
+                      Egerde siz täze kursy ýokarda girizip duran bolsaňyz 
+                    </small>
+                      <AsyncSelect
+                        cacheOptions
+                        loadOptions={loadOptions}
+                        defaultOptions
+                        value={selectedOption}
+                        onChange={handleChange}
+                        placeholder="Goýmaly topigiň kursyny saýlaň..."
+                        styles={customStyles}
                       />
-                      <small className="d-block mt_dec--5">
-                        Mysal üçin: <span> </span>
-                        <Link href="https://www.youtube.com/watch?v=yourvideoid">
-                          https://www.youtube.com/watch?v=yourvideoid
-                        </Link>
-                      </small>
+                  <div className="accordion-body card-body">
+                    {/* <Lesson
+                      handleFileChange={handleFileChange}
+                      handleImportClick={handleImportClick}
+                      fileInputRef={fileInputRef}
+                      id="accOne1"
+                      target="accCollapseOne1"
+                      expanded={true}
+                      text="1-nji Sapak"
+                      start={0}
+                      end={4}
+                    />
+                    <Lesson
+                      handleFileChange={handleFileChange}
+                      handleImportClick={handleImportClick}
+                      fileInputRef={fileInputRef}
+                      id="accOne2"
+                      target="accCollapseOne2"
+                      expanded={false}
+                      text="2-nji sapak"
+                      start={4}
+                      end={8}
+                    /> */}
+
+                    <button
+                      className="rbt-btn btn-md btn-gradient hover-icon-reverse"
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      <span className="icon-reverse-wrapper">
+                        <span className="btn-text">Täze Topigi goşuň</span>
+                        <span className="btn-icon">
+                          <i className="feather-plus-circle"></i>
+                        </span>
+                        <span className="btn-icon">
+                          <i className="feather-plus-circle"></i>
+                        </span>
+                      </span>
+                    </button>
+                  </div>
+                    </div>
                     </div>
                   </div>
+
                 </div>
               </div>
 
@@ -150,47 +336,6 @@ const CreateCourse = () => {
                   aria-labelledby="accThree3"
                   data-bs-parent="#tutionaccordionExamplea12"
                 >
-                  <div className="accordion-body card-body">
-                    <Lesson
-                      handleFileChange={handleFileChange}
-                      handleImportClick={handleImportClick}
-                      fileInputRef={fileInputRef}
-                      id="accOne1"
-                      target="accCollapseOne1"
-                      expanded={true}
-                      text="1-nji Sapak"
-                      start={0}
-                      end={4}
-                    />
-                    <Lesson
-                      handleFileChange={handleFileChange}
-                      handleImportClick={handleImportClick}
-                      fileInputRef={fileInputRef}
-                      id="accOne2"
-                      target="accCollapseOne2"
-                      expanded={false}
-                      text="2-nji sapak"
-                      start={4}
-                      end={8}
-                    />
-
-                    <button
-                      className="rbt-btn btn-md btn-gradient hover-icon-reverse"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                    >
-                      <span className="icon-reverse-wrapper">
-                        <span className="btn-text">Täze Topigi goşuň</span>
-                        <span className="btn-icon">
-                          <i className="feather-plus-circle"></i>
-                        </span>
-                        <span className="btn-icon">
-                          <i className="feather-plus-circle"></i>
-                        </span>
-                      </span>
-                    </button>
-                  </div>
                 </div>
               </div>
 

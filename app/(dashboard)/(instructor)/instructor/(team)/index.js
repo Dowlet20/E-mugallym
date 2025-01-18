@@ -22,6 +22,7 @@ import TeamEight from "@/components/Team/TeamEight";
 import TeamNine from "@/components/Team/TeamNine";
 import TeamTen from "@/components/Team/TeamTen";
 
+
 const InstructorPage = () => {
   return (
     <>
@@ -32,7 +33,9 @@ const InstructorPage = () => {
           <Cart />
           <BreadCrumb title="Mugallymlar" text="Mugallymlar" />
 
-          <div className="rbt-team-area bg-color-white rbt-section-gapBottom">
+          <div 
+            className="rbt-team-area bg-color-white rbt-section-gapBottom"
+          >
             <TeamThree />
           </div>
 

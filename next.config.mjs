@@ -27,18 +27,18 @@ const nextConfig = {
             key: 'Cross-Origin-Embedder-Policy',
             value: 'unsafe-none',  // Temporarily disable COEP
           },
-          // { 
-          //   key: 'Access-Control-Allow-Origin', 
-          //   value: '*' 
-          // },
-          // { 
-          //   key: 'Access-Control-Allow-Methods', 
-          //   value: 'GET, POST, PUT, DELETE' 
-          // },
-          // { 
-          //   key: 'Access-Control-Allow-Headers', 
-          //   value: 'Content-Type' 
-          // },
+          { 
+            key: 'Access-Control-Allow-Origin', 
+            value: '*' 
+          },
+          { 
+            key: 'Access-Control-Allow-Methods', 
+            value: 'GET, POST, PUT, DELETE' 
+          },
+          { 
+            key: 'Access-Control-Allow-Headers', 
+            value: 'Content-Type' 
+          },
         //   { "key": "Access-Control-Allow-Credentials", "value": "true" },
         // { "key": "Access-Control-Allow-Origin", "value": "*" },
         // { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
@@ -52,15 +52,15 @@ const nextConfig = {
   },
 
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/course-filter-two-toggle',
-        permanent: true,
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/course-filter-two-toggle',
+  //       permanent: true,
+  //     },
+  //   ];
+  // },duzetmeli
 };
 
 export default nextConfig;

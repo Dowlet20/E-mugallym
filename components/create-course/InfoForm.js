@@ -6,6 +6,7 @@ import Image from "next/image";
 import img from "../../public/images/others/thumbnail-placeholder.svg";
 import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
+import { Ripple } from "react-css-spinners";
 
 const InfoForm = () => {
   const [inp, setInp] = useState(100);
@@ -28,9 +29,13 @@ const InfoForm = () => {
   const [discount, setDiscount] = useState(0);
   const [preview, setPreview] = useState(null);
   const [start_date, setStart_date] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+
     if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
       alert("Ähli maglumatlary doly giriziň! ")
       return;
@@ -74,6 +79,8 @@ const InfoForm = () => {
 
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
   
@@ -138,8 +145,20 @@ const InfoForm = () => {
     fetchData();
   }, []);
 
+  
+
   return (
     <>
+     {loading && (
+      <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+     )}
       <form onSubmit={handleSubmit} className="rbt-course-field-wrapper rbt-default-form">
         <div className="course-field mb--15">
           <label htmlFor="field-1">
@@ -555,6 +574,7 @@ const InfoForm = () => {
               <button
                 className="rbt-btn btn-gradient hover-icon-reverse w-100 text-center"
                 type="submit"
+                disabled={loading}
               >
                     Kursy döretmek
                 <span className="icon-reverse-wrapper">

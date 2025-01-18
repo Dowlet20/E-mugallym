@@ -12,12 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCartAction } from "@/redux/action/CartAction";
 import { useAppContext } from "@/context/Context";
 import axiosInstance from "@/utils/axiosInstance_library";
-
+import { Ripple } from "react-css-spinners";
 const Shop = () => {
   const { cartToggle, setCart } = useAppContext();
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
@@ -55,17 +56,35 @@ const Shop = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = '/api/books/'
 
+        const url = '/api/books/';
         const response = await axiosInstance.get(url);
         setProducts(response.data);
+        setLoading(false);
+
       }
       catch (error) {
         console.error(error);
       }
     }
     fetchData();
-  }, [])
+  }, []);
+
+  if (loading) {
+    return (
+      <div 
+        className="d-flex bg-transparent"  
+        style={{height: '100vh'}}
+      >
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+    );
+  }
 
   return (
     <>

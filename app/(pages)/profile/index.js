@@ -17,7 +17,7 @@ import Separator from "@/components/Common/Separator";
 import FooterOne from "@/components/Footer/Footer-One";
 import axiosInstance_user from "@/utils/axiosInstance_user";
 import axiosInstance from "@/utils/axiosInstance";
-
+import { Ripple } from "react-css-spinners";
 
 const SingleProfile = ({ getParams }) => {
   const [user, setUser] = useState({});
@@ -25,6 +25,7 @@ const SingleProfile = ({ getParams }) => {
   const router = useRouter();
   const postId = parseInt(getParams.profileId);
   let getCourse;
+  const [loading, setLoading] = useState(true);
 
   getCourse = JSON.parse(JSON.stringify(CourseData.courseDetails));
 
@@ -37,10 +38,9 @@ const SingleProfile = ({ getParams }) => {
         const response_user = await axiosInstance_user.get(`/api/user/${postId}`);
         setUser(response_user.data);
 
-        
-
         const response = await axiosInstance.get(`/api/courses/?user=${postId}`);
         setCourses(response.data);
+        setLoading(false);
 
       } catch (err) {
         console.error(err)
@@ -50,6 +50,19 @@ const SingleProfile = ({ getParams }) => {
       fetchData();
     }
   },[]);
+
+  if (loading) {
+    return (
+      <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+        <Ripple
+          color="rgba(12,235,115,1)"
+          size={115}
+          thickness={7}
+          className="mx-auto align-self-center"
+        />
+      </div>
+    );
+  }
 
 
   return (

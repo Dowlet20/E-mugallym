@@ -6,6 +6,7 @@ import axios from "axios";
 import img1 from "../../public/images/tab/tabs-10.jpg";
 
 import axiosInstance from "@/utils/axiosInstance_user";
+import { Ripple } from "react-css-spinners";
 
 const InstructorRegistration = () => {
   const [professions, setProfessions] = useState([]);
@@ -28,6 +29,7 @@ const InstructorRegistration = () => {
 
     }
   )
+  const [loading, setLoading] = useState(false);
 
   const handleFileImg = (event) => {
     if (event.target.files && event.target.files.length > 0) {  
@@ -71,6 +73,7 @@ const InstructorRegistration = () => {
   const postInstructor = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
 
     if (!img || !thumbnail || !info?.username || !info?.first_name || !info?.last_name || !info?.middle_name || !info?.email || !selectedProfession || !info?.phone_number || !info?.biography) {
       alert("Maglumatynyzy doly giriziň!");
@@ -108,6 +111,8 @@ const InstructorRegistration = () => {
     } catch (error) {
       console.error("Error response:", error.response);
       console.error("Error message:", error.message);
+    } finally {
+      setLoading(false);
     }
 
   }
@@ -115,6 +120,16 @@ const InstructorRegistration = () => {
 
   return (
     <>
+      {loading && (
+        <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
+          <Ripple
+            color="rgba(12,235,115,1)"
+            size={115}
+            thickness={7}
+            className="mx-auto align-self-center"
+          />
+        </div>
+      )}
       <div className="row pt--60 g-5">
         <div className="col-lg-4">
           <div className="thumbnail">
