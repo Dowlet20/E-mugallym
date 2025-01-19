@@ -1,0 +1,7 @@
+node_modules/**/* filter=lfs diff=lfs merge=lfs -text
+\!node_modules/**/.gitattributes
+\!node_modules/**/.gitpod.yml
+\!node_modules/**/.gitkeep
+node_modules/**/*git filter=lfs diff=lfs merge=lfs -text
+lfs filter=lfs diff=lfs merge=lfs -text
+untrack filter=lfs diff=lfs merge=lfs -text
