@@ -20,10 +20,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import LessonModal from "../QuizModals/LessonModal";
 
 import SingleLesson from "./SingleLesson";
+import axiosInstance from "@/utils/axiosInstance";
 
 const Lesson = ({
+
   handleFileChange,
   handleImportClick,
   fileInputRef,
@@ -33,7 +36,13 @@ const Lesson = ({
   start,
   end,
   id,
-}) => {
+  topic,
+  trigger,
+  setTrigger,
+  createCourseId,
+  selectedCourseId
+
+  }) => {
   const [courseList, setCourseList] = useState(CourseData.courseDetails);
   const [hydrated, setHydrated] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -41,13 +50,14 @@ const Lesson = ({
   useEffect(() => {
     setHydrated(true);
   }, []);
-
+  
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
 
   function handleDragEnd(event) {
     const { active, over } = event;
@@ -66,6 +76,17 @@ const Lesson = ({
     return null;
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.delete(`/api/topics/${topic.slug}/`);
+      setTrigger(true);
+
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
   return (
     <>
       <div className="accordion-item card mb--20">
@@ -82,14 +103,24 @@ const Lesson = ({
             aria-expanded={toggle}
             aria-controls={target}
           >
-            {text}
+            {topic?.title}
           </button>
           <span
             className="rbt-course-icon rbt-course-edit"
             data-bs-toggle="modal"
             data-bs-target="#UpdateTopic"
           ></span>
-          <span className="rbt-course-icon rbt-course-del"></span>
+          <span 
+            className="rbt-course-icon rbt-course-del"
+            onClick={(e)=> {
+              e.preventDefault();
+              const userConfirmed = window.confirm("Siz bu topigi pozmak isleýärsiňizmi? ");
+              if (userConfirmed) {
+                handleDelete(e);
+              }
+            }}
+          >
+          </span>
         </h2>
         <div
           id={target}
@@ -104,12 +135,19 @@ const Lesson = ({
               onDragEnd={handleDragEnd}
               modifiers={[restrictToVerticalAxis]}
             >
+              {/* .slice(start, end) */}
               <SortableContext
-                items={courseList}
+                items={topic?.lessons}
                 strategy={verticalListSortingStrategy}
-              >
-                {courseList.slice(start, end).map((course) => (
-                  <SingleLesson key={course.id} course={course} />
+                >
+                {
+                  topic?.lessons.length ===0 ? (<></>) :
+                  topic?.lessons.map((lesson) => (
+                   <SingleLesson 
+                    key={lesson.id} 
+                    lesson={lesson} 
+                    setTrigger={setTrigger}
+                  />
                 ))}
               </SortableContext>
             </DndContext>
@@ -191,6 +229,12 @@ const Lesson = ({
           </div>
         </div>
       </div>
+      <LessonModal 
+        topicId={topic?.id} 
+        createCourseId={createCourseId} 
+        selectedCourseId={selectedCourseId} 
+        setTrigger={setTrigger}
+      />
     </>
   );
 };

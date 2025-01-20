@@ -26,12 +26,30 @@ import { useAppContext } from "@/context/Context";
 const CreateCourse = () => {
   const { isLightTheme, toggleTheme } = useAppContext();
   const fileInputRef = useRef(null);
-  const [topicTitle, setTopicTitle] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null); 
+  const [createCourseId, setCreateCourseId] = useState(0);
+  const [trigger, setTrigger] = useState(false);
+  const [topics, setTopics] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState("");
 
+  useEffect(() => {
+    if (trigger || selectedCourse) {
+      const fetchData = async () => {
+        try {
+
+          const response = await axiosInstance.get(`/api/courses/${selectedCourse}/`);
+          setTopics(response.data.topics);
+
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      fetchData();
+      setTrigger(false);
+    }
+  }, [trigger, selectedCourse]);
   
 
-  
   const loadOptions = async (inputValue) => {
     const url = !inputValue ? "/api/courses" : `/api/courses/?search=${inputValue}`; 
     
@@ -41,7 +59,8 @@ const CreateCourse = () => {
       
       const options = response.data.map(item=> ({
         label: item.title,
-        value: item.id
+        value: item.id,
+        anotherValue:item.slug
       }))
 
       return options;
@@ -53,9 +72,12 @@ const CreateCourse = () => {
   };
 
   const handleChange = selectedOption => {
-    setSelectedOption(selectedOption);
+
+    setSelectedOption(selectedOption?.value);
+    setSelectedCourse(selectedOption?.anotherValue);
+
   };
-  
+
   const previewImages = CreateCourseData.createCourse[0].landscape.filter(
     (item) => item.type === "preview"
   );
@@ -172,7 +194,7 @@ const CreateCourse = () => {
       }),
       singleValue: (provided) => ({
         ...provided,
-        fontSize: '14px', // Optional: Adjust the font size for the selected value
+        fontSize: '16px', // Optional: Adjust the font size for the selected value
         display: 'flex',
         alignItems: 'center', // Centers the selected value vertically
       }),
@@ -181,6 +203,7 @@ const CreateCourse = () => {
         marginTop: '-10px', // Remove extra margins that could cause misalignment
         display: 'flex',
         alignItems: 'center',
+        fontSize: '14px',
          // Center the input text vertically
       }),
       dropdownIndicator: (provided) => ({
@@ -195,6 +218,7 @@ const CreateCourse = () => {
         display: 'none', // Optional: Hide the indicator separator if you don't want it
       }),
     };
+
     
     return (
       <>
@@ -222,7 +246,7 @@ const CreateCourse = () => {
                   data-bs-parent="#tutionaccordionExamplea1"
                 >
                   <div className="accordion-body card-body">
-                    <InfoForm />
+                    <InfoForm setCreateCourseId={setCreateCourseId} />
                   </div>
                 </div>
               </div>
@@ -264,24 +288,36 @@ const CreateCourse = () => {
                         cacheOptions
                         loadOptions={loadOptions}
                         defaultOptions
-                        value={selectedOption}
+                        value={selectedOption?.label}
                         onChange={handleChange}
                         placeholder="Goýmaly topigiň kursyny saýlaň..."
                         styles={customStyles}
                       />
                   <div className="accordion-body card-body">
+                    {topics.length===0 ? (<></>) : 
+                      topics.map((topic, index) => {
+                        return (
+                          <Lesson
+                            key={index}
+                            topic={topic}
+                            handleFileChange={handleFileChange}
+                            handleImportClick={handleImportClick}
+                            fileInputRef={fileInputRef}
+                            id={`accOne${index+1}`}
+                            target={`accCollapseOne${index+1}`}
+                            expanded={true}
+                            text="1-nji Sapak"
+                            start={0}
+                            end={4}
+                            trigger={trigger}
+                            setTrigger={setTrigger}
+                            createCourseId={createCourseId}
+                            selectedCourseId={selectedOption}
+                          />
+                        )
+                      })
+                    }
                     {/* <Lesson
-                      handleFileChange={handleFileChange}
-                      handleImportClick={handleImportClick}
-                      fileInputRef={fileInputRef}
-                      id="accOne1"
-                      target="accCollapseOne1"
-                      expanded={true}
-                      text="1-nji Sapak"
-                      start={0}
-                      end={4}
-                    />
-                    <Lesson
                       handleFileChange={handleFileChange}
                       handleImportClick={handleImportClick}
                       fileInputRef={fileInputRef}
@@ -592,9 +628,14 @@ const CreateCourse = () => {
           </div>
         </div>
       </div>
-      <TopicModal />
+      <TopicModal 
+        createCourseId={createCourseId} 
+        selectedCourseId={selectedOption} 
+        trigger={trigger}
+        setTrigger={setTrigger}
+      />
       <UpdateModal />
-      <LessonModal />
+      {/* <LessonModal /> */}
       <QuizModal />
       <AssignmentModal />
     </>

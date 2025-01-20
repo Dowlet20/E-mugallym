@@ -1,12 +1,86 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 
 import img from "../../../public/images/others/thumbnail-placeholder.svg";
+import Lesson from "../lesson/Lesson";
+import axiosInstance from "@/utils/axiosInstance";
 
-const LessonModal = () => {
+const LessonModal = ({
+  topicId,
+  createCourseId,
+  selectedCourseId,
+  setTrigger
+}) => {
   const fileInputRef = useRef(null);
+  const closeModalButtonRef=useRef(null);
+  const [activeButton, setActiveButton] = useState(null);
+  const [lessonTitle, setLessonTitle] = useState("");
+  const [lessonOrder, setLessonOrder] = useState(123123123);
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("Faýl saýlanylmadyk! ");
+  const [type, setType] = useState("");
+  const [error, setError] = useState("");
+  
+  const lessonPost = async () => {
+  
+   
+    if (!file) {
+      alert('Faýly giriziň!');
+      return;
+    }
+  
+    if (!lessonTitle) {
+      setError("Sapagyň adyny giriziň!");
+      return;
+    }
+  
+    if (!selectedCourseId && !createCourseId) {
+      setError("Topigiň kursyny giriziň!");
+      return;
+    }
+  
+    if (!topicId) {
+      setError("Topigi saýlaň!");
+      return;
+    }
+  
+    const course = selectedCourseId ? selectedCourseId : createCourseId ? createCourseId : 0;
+    const order = parseInt(lessonOrder, 10);
+  
+    
+    const formData = new FormData();
+    formData.append('title', lessonTitle);
+    formData.append('topic', topicId);
+    formData.append('course', course);
+    formData.append('order', order);
+    formData.append('material', file); 
+    formData.append('type', 'video'); 
+  
+    try {
+      const response = await axiosInstance.post(
+        "/api/lesson/", 
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("men geldim");
+      
+      setLessonTitle(""); 
+      setLessonOrder(123123123); 
+      setTrigger(true); 
+      setFile(null); 
+      setFileName("Faýl saýlanylmadyk! ");
+      closeModalButtonRef.current.click();
+    } catch (err) {
+      console.error("Error during lesson post:", err);
+    }
+  };
+  
 
   const handleImportClick = (e) => {
     e.preventDefault();
@@ -15,6 +89,8 @@ const LessonModal = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    setFileName(file.name);
+    setFile(file);
     // if (file) {
     //   console.log("Selected file:", file.name);
     // }
@@ -45,67 +121,116 @@ const LessonModal = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <h5 className="modal-title mb--20" id="LessonLabel">
-                      Add Lesson
+                      Sapak goş
                     </h5>
                     <div className="course-field mb--20">
-                      <label htmlFor="modal-field-1">Lesson Name</label>
-                      <input id="modal-field-1" type="text" />
+                      <label htmlFor="modal-field-1">
+                        Sapagyň ady
+                      </label>
+                      <input 
+                        id="modal-field-1" 
+                        type="text" 
+                        onChange={(e)=>setLessonTitle(e.target.value)}
+                      />
                       <small>
-                        <i className="feather-info"></i> Lesson titles are
-                        displayed publicly wherever required. Each Lesson may
-                        contain one or more lessons, quiz and assignments.
+                        <i className="feather-info"> </i> 
+                        Sapagyň adyny giriz
                       </small>
                     </div>
                     <div className="course-field mb--20">
-                      <label htmlFor="modal-field-2">Lesson Summary</label>
-                      <textarea id="modal-field-2"></textarea>
+                      <label htmlFor="modal-field-2">
+                        Sapagyň durmaly tertibi
+                      </label>
+                      <input 
+                        id="modal-field-2" 
+                        type="number" 
+                        onChange={
+                          (e)=>setLessonOrder(e.target.value)
+                        }
+                      />
                       <small>
-                        <i className="feather-info"></i> Add a summary of short
-                        text to prepare students for the activities for the
-                        Lesson. The text is shown on the course page beside the
-                        tooltip beside the Lesson name.
+                        <i className="feather-info"> </i> 
+                        Sapagyň durmaly tertibini giriz
                       </small>
                     </div>
                     <div className="course-field mb--20">
-                      <h6>Feature Image</h6>
-                      <div className="rbt-create-course-thumbnail upload-area">
-                        <div className="upload-area">
-                          <div
-                            className="brows-file-wrapper"
-                            data-black-overlay="9"
-                          >
-                            <input
-                              name="createinputfile"
-                              id="createinputfile"
-                              type="file"
-                              className="inputfile"
-                            />
-                            <Image
-                              id="createfileImage"
-                              src={img}
-                              width={797}
-                              height={262}
-                              alt="file image"
-                            />
-
-                            <label
-                              className="d-flex"
-                              htmlFor="createinputfile"
-                              title="No File Choosen"
-                            >
-                              <i className="feather-upload"></i>
-                              <span className="text-center">Choose a File</span>
-                            </label>
-                          </div>
-                        </div>
+                      <h6>
+                        Sapagyň videosyny giriziň
+                      </h6>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: '20px',
+                        padding: '20px',
+                        //backgroundColor: '#f9f9f9',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                      }}>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          id="fileInput"
+                          style={{
+                            display: 'none', 
+                            backgroundColor: '#f0f0f0', 
+                            border: '1px solid #ccc', 
+                            padding: '10px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            width: '100%', 
+                            fontSize: '16px',
+                          }}
+                          onChange={handleFileChange}
+                        />
+                        
+                        <label 
+                          htmlFor="fileInput"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '15px 30px',
+                            backgroundColor: '#faf6fd',
+                            color: 'black',
+                            fontSize: '14px',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.3s ease, transform 0.2s ease',
+                          }}
+                        >
+                          <span style={{ marginRight: '10px' }} className="file-label-text">{fileName}</span>
+                          <span style={{ fontSize: '18px' }} className="file-upload-icon">📂</span>
+                        </label>
                       </div>
 
                       <small>
-                        <i className="feather-info"></i> <b>Size:</b> 700x430
-                        pixels, <b>File Support:</b> JPG, JPEG, PNG, GIF, WEBP
+                        <i className="feather-info"> </i> 
+                        Siz diňe wideo ýükläp bilýärsiňiz
                       </small>
                     </div>
-                    <div className="course-field mb--20">
+                    <div>
+                      <button
+                        className={`btn btn-lg ${activeButton === 1 ? "btn-primary" : "btn-outline-primary"}`}
+                        onClick={() => setActiveButton(1)}
+                      >
+                        Video 
+                      </button>
+                      
+                      <button
+                        className={`btn btn-lg ${activeButton === 2 ? "btn-secondary" : "btn-outline-secondary"}`}
+                        onClick={() => setActiveButton(2)}
+                        style={{ marginLeft: '8px' }} /* 2 units gap */
+                      >
+                        Document
+                      </button>
+                    </div>
+                    <small>
+                        <i className="feather-info"> </i> 
+                        Girizmeli faýlyň görnüşini saýlaň
+                      </small>
+                    {/* <div className="course-field mb--20">
                       <h6>Video Source</h6>
                       <div className="rbt-modern-select bg-transparent height-45 w-100 mb--10">
                         <select className="w-100">
@@ -117,8 +242,8 @@ const LessonModal = () => {
                           <option>twitter</option>
                         </select>
                       </div>
-                    </div>
-                    <div className="course-field mb--15">
+                    </div> */}
+                    {/* <div className="course-field mb--15">
                       <label>Video playback time</label>
                       <div className="row row--15">
                         <div className="col-lg-4">
@@ -140,8 +265,8 @@ const LessonModal = () => {
                           </small>
                         </div>
                       </div>
-                    </div>
-                    <div className="course-field mb--20">
+                    </div> */}
+                    {/* <div className="course-field mb--20">
                       <h6>Upload exercise files to the Lesson</h6>
                       <div className="rbt-modern-select bg-transparent height-45 w-100 mb--10">
                         <button
@@ -165,8 +290,8 @@ const LessonModal = () => {
                           onChange={handleFileChange}
                         />
                       </div>
-                    </div>
-                    <div className="course-field mb--20">
+                    </div> */}
+                    {/* <div className="course-field mb--20">
                       <p className="rbt-checkbox-wrapper mb--5 d-flex">
                         <input
                           id="rbt-checkbox-11"
@@ -178,7 +303,8 @@ const LessonModal = () => {
                           Enable Course Preview
                         </label>
                       </p>
-                    </div>
+                    </div> */}
+                    
                   </div>
                 </div>
               </div>
@@ -186,15 +312,20 @@ const LessonModal = () => {
             <div className="top-circle-shape"></div>
             <div className="modal-footer pt--30 justify-content-between">
               <button
+                ref={closeModalButtonRef}
                 type="button"
                 className="rbt-btn btn-border btn-md radius-round-10"
                 data-bs-dismiss="modal"
               >
-                Cancel
+                Çyk
               </button>
               <div className="content">
-                <button type="button" className="rbt-btn btn-md">
-                  Update Lesson
+                <button 
+                  type="button" 
+                  className="rbt-btn btn-md"
+                  onClick={lessonPost}
+                >
+                  Sapagy goş
                 </button>
               </div>
             </div>

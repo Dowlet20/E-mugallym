@@ -1,6 +1,60 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState, useRef } from "react";
+import axiosInstance from "@/utils/axiosInstance";
 
-const TopicModal = () => {
+const TopicModal = ({
+  createCourseId,
+  selectedCourseId,
+  trigger,
+  setTrigger
+}) => {
+
+  const [topicTitle, setTopicTitle] = useState("");
+  const [topicOrder, setTopicOrder] = useState(123123123);
+  const [error, setError] = useState("");
+  const closeModalButtonRef = useRef(null);
+
+  
+
+  const topicPost = async (e) => {
+
+    const formData = {
+      title:topicTitle,
+      course:selectedCourseId ? selectedCourseId : 
+      createCourseId ? createCourseId : 0,
+      order:parseInt(topicOrder,10)
+    }
+
+
+    try {
+      
+      if (!formData?.title) {
+        setError("Topigiň adyny giriziň! ");
+      }
+
+      if (!formData?.course) {
+        setError("Topigiň kursyny giriziň! ");
+      }
+
+      if (formData?.title && formData?.course) {
+        const response = await axiosInstance.post("/api/topics/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setTopicTitle("");
+        setTopicOrder(123123123);
+        setTrigger(true);
+        closeModalButtonRef.current.click();
+
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+
   return (
     <>
       <div
@@ -27,18 +81,32 @@ const TopicModal = () => {
                 <div className="row">
                   <div className="col-lg-12">
                     <h5 className="modal-title mb--20" id="exampleModalLabel">
-                      Add Topic
+                      Topik goş
                     </h5>
                     <div className="course-field mb--20">
-                      <label htmlFor="modal-field-1">Topic Name</label>
-                      <input id="modal-field-1" type="text" />
+                      <label htmlFor="modal-field-1">Topigyň ady</label>
+                      <input 
+                        id="modal-field-1" 
+                        type="text"
+                        onChange={(e)=>setTopicTitle(e.target.value)}
+                      />
                       <small>
-                        <i className="feather-info"></i> Topic titles are
-                        displayed publicly wherever required. Each topic may
-                        contain one or more lessons, quiz and assignments.
+                        <i className="feather-info"></i> Topik bu kursyň bölümidir. Her topik bir ýa-da birnäçe sapaklary, testleri we ýumuşlary öz içine alýar.
                       </small>
                     </div>
                     <div className="course-field mb--20">
+                      <label htmlFor="modal-field-1">Topigiň orny</label>
+                      <input 
+                        id="modal-field-1" 
+                        type="number"
+                        onChange={(e)=>setTopicOrder(e.target.value)}
+                      />
+                      <small>
+                        <i className="feather-info"></i> 
+                        Topigiň durmaly ornuny giriziň.
+                      </small>
+                    </div>
+                    {/* <div className="course-field mb--20">
                       <label htmlFor="modal-field-2">Topic Summary</label>
                       <textarea id="modal-field-2"></textarea>
                       <small>
@@ -47,19 +115,27 @@ const TopicModal = () => {
                         topic. The text is shown on the course page beside the
                         tooltip beside the topic name.
                       </small>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="top-circle-shape"></div>
             <div className="modal-footer pt--30">
+            <div className="top-circle-shape"></div>
+              <button
+                className="rbt-btn btn-border btn-md radius-round-10"
+                //data-bs-dismiss="modal" //duzetmeli
+                onClick={topicPost}
+              >
+                Goş
+              </button>
               <button
                 type="button"
                 className="rbt-btn btn-border btn-md radius-round-10"
                 data-bs-dismiss="modal"
+                ref={closeModalButtonRef}
               >
-                Cancel
+                Çyk
               </button>
             </div>
           </div>

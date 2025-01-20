@@ -8,7 +8,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
 import { Ripple } from "react-css-spinners";
 
-const InfoForm = () => {
+const InfoForm = ({setCreateCourseId}) => {
   const [inp, setInp] = useState(100);
   const [title, setTitle] = useState("");
   const [short_description, setShort_description] = useState("");
@@ -64,8 +64,6 @@ const InfoForm = () => {
     formData.append('start_date', start_date);
     
     try {
-
-      console.log("men geldim")
       const response = await axiosInstance.post(
         "/api/courses/", 
         formData, 
@@ -75,6 +73,7 @@ const InfoForm = () => {
           }  
         }
       );
+      setCreateCourseId(response.data.id)
       e.target.reset();
 
     } catch (err) {
