@@ -7,6 +7,7 @@ export const metadata = {
 };
 
 const CreateCourseLayout = () => {
+  //dunno
   return (
     <>
       <CreateCoursePage />
