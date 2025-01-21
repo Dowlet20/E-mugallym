@@ -8,7 +8,12 @@ import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
 import { Ripple } from "react-css-spinners";
 
-const InfoForm = ({setCreateCourseId}) => {
+const InfoForm = ({
+  setCreateCourseId,
+  setCreateCourseSlug,
+  setCreateCourseTitle,
+  acButtonRef
+}) => {
   const [inp, setInp] = useState(100);
   const [title, setTitle] = useState("");
   const [short_description, setShort_description] = useState("");
@@ -73,7 +78,10 @@ const InfoForm = ({setCreateCourseId}) => {
           }  
         }
       );
-      setCreateCourseId(response.data.id)
+      setCreateCourseId(response.data.id);
+      setCreateCourseSlug(response.data.slug);
+      setCreateCourseTitle(response.data.title);
+      acButtonRef.current.click();
       e.target.reset();
 
     } catch (err) {

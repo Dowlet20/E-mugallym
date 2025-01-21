@@ -4,7 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 
 const TopicModal = ({
   createCourseId,
-  selectedCourseId,
+  //selectedCourseId,
   trigger,
   setTrigger
 }) => {
@@ -18,10 +18,13 @@ const TopicModal = ({
 
   const topicPost = async (e) => {
 
+    if (!createCourseId) {
+      return;
+    }
+
     const formData = {
       title:topicTitle,
-      course:selectedCourseId ? selectedCourseId : 
-      createCourseId ? createCourseId : 0,
+      course:createCourseId,
       order:parseInt(topicOrder,10)
     }
 

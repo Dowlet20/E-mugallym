@@ -14,6 +14,8 @@ const LessonModal = ({
   setTrigger
 }) => {
   const fileInputRef = useRef(null);
+  const titleInputRef =useRef(null);
+  const orderInputRef =useRef(null);
   const closeModalButtonRef=useRef(null);
   const [activeButton, setActiveButton] = useState(null);
   const [lessonTitle, setLessonTitle] = useState("");
@@ -22,10 +24,12 @@ const LessonModal = ({
   const [fileName, setFileName] = useState("Faýl saýlanylmadyk! ");
   const [type, setType] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const lessonPost = async () => {
   
-   
+    setIsSubmitting(true);
+
     if (!file) {
       alert('Faýly giriziň!');
       return;
@@ -68,16 +72,19 @@ const LessonModal = ({
           },
         }
       );
-      console.log("men geldim");
       
       setLessonTitle(""); 
+      titleInputRef.current.value="";
       setLessonOrder(123123123); 
+      orderInputRef.current.value="";
       setTrigger(true); 
       setFile(null); 
       setFileName("Faýl saýlanylmadyk! ");
       closeModalButtonRef.current.click();
     } catch (err) {
       console.error("Error during lesson post:", err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   
@@ -128,6 +135,7 @@ const LessonModal = ({
                         Sapagyň ady
                       </label>
                       <input 
+                        ref={titleInputRef}
                         id="modal-field-1" 
                         type="text" 
                         onChange={(e)=>setLessonTitle(e.target.value)}
@@ -142,6 +150,7 @@ const LessonModal = ({
                         Sapagyň durmaly tertibi
                       </label>
                       <input 
+                        ref={orderInputRef}
                         id="modal-field-2" 
                         type="number" 
                         onChange={
@@ -324,6 +333,7 @@ const LessonModal = ({
                   type="button" 
                   className="rbt-btn btn-md"
                   onClick={lessonPost}
+                  disabled={isSubmitting}
                 >
                   Sapagy goş
                 </button>

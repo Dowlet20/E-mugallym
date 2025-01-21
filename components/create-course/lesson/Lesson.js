@@ -40,7 +40,7 @@ const Lesson = ({
   trigger,
   setTrigger,
   createCourseId,
-  selectedCourseId
+  //selectedCourseId
 
   }) => {
   const [courseList, setCourseList] = useState(CourseData.courseDetails);
@@ -232,7 +232,7 @@ const Lesson = ({
       <LessonModal 
         topicId={topic?.id} 
         createCourseId={createCourseId} 
-        selectedCourseId={selectedCourseId} 
+        //selectedCourseId={selectedCourseId} 
         setTrigger={setTrigger}
       />
     </>
