@@ -1,7 +1,6 @@
 {
   "/(courses)/create-course/page": "app/(courses)/create-course/page.js",
-  "/(courses)/course-details/[courseId]/page": "app/(courses)/course-details/[courseId]/page.js",
-  "/(courses)/(lessons)/lesson/[lessonId]/[courseId]/page": "app/(courses)/(lessons)/lesson/[lessonId]/[courseId]/page.js",
   "/page": "app/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/(pages)/become-a-teacher/page": "app/(pages)/become-a-teacher/page.js"
 }
