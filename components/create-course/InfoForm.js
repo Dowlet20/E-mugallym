@@ -39,15 +39,15 @@ const InfoForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
-
+    
     if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
       alert("Ähli maglumatlary doly giriziň! ")
       return;
     }
+
+    setLoading(true);
     
     const formData = new FormData();
-    
     formData.append('title', title);
     formData.append('short_description', short_description);
     formData.append('description', description);
@@ -67,6 +67,9 @@ const InfoForm = ({
     formData.append('paid', paid);
     formData.append('certified', certified);
     formData.append('start_date', start_date);
+    // formData.forEach((value, key) => {
+    //   console.log(`${key}: ${value}`);
+    // });
     
     try {
       const response = await axiosInstance.post(
