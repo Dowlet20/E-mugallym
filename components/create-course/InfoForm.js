@@ -12,87 +12,33 @@ const InfoForm = ({
   setCreateCourseId,
   setCreateCourseSlug,
   setCreateCourseTitle,
-  acButtonRef
+  acButtonRef,
+  setTitle,
+  setShort_description,
+  setDescription,
+  setLearning_outcomes,
+  setRequirements,
+  setSelectedLevel,
+  setSelectedLanguage,
+  setSelectedValues,
+  setSelectedImage,
+  categories,
+  levels,
+  languages,
+  setPaid,
+  setCertified,
+  setPrice,
+  setDiscount,
+  setPreview,
+  setStart_date,
+  selectedLevel,
+  selectedLanguage,
+  paid,
+  preview,
+  certified
 }) => {
   const [inp, setInp] = useState(100);
-  const [title, setTitle] = useState("");
-  const [short_description, setShort_description] = useState("");
-  const [description, setDescription] = useState("");
-  const [learning_outcomes, setLearning_outcomes] = useState("");
-  const [teacherId, setTeacherId] = useState(null);
-  const [requirements, setRequirements] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState(0);
-  const [selectedLanguage, setSelectedLanguage] = useState(0);
-  const [selectedValues, setSelectedValues] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [levels, setLevels] = useState([]);
-  const [languages, setLanguages] = useState([]);
-  const [paid, setPaid] = useState(true);
-  const [certified, setCertified] = useState(true);
-  const [price, setPrice] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [preview, setPreview] = useState(null);
-  const [start_date, setStart_date] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    
-    if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
-      alert("Ähli maglumatlary doly giriziň! ")
-      return;
-    }
-
-    setLoading(true);
-    
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('short_description', short_description);
-    formData.append('description', description);
-    formData.append('learning_outcomes', learning_outcomes);
-    formData.append('user', teacherId);
-    formData.append('requirements', requirements);
-    formData.append('level', selectedLevel);
-    formData.append('language', selectedLanguage);
-    selectedValues.forEach(value=>{
-      formData.append('category', value);
-    })
-    //formData.append('category', selectedValues);
-    formData.append('thumbnail', selectedImage);
-    formData.append('price', price);
-    formData.append('discount', discount);
-    formData.append('is_active', false);
-    formData.append('paid', paid);
-    formData.append('certified', certified);
-    formData.append('start_date', start_date);
-    // formData.forEach((value, key) => {
-    //   console.log(`${key}: ${value}`);
-    // });
-    
-    try {
-      const response = await axiosInstance.post(
-        "/api/courses/", 
-        formData, 
-        {
-          headers: {
-            'Content-Type':'multipart-data',
-          }  
-        }
-      );
-      setCreateCourseId(response.data.id);
-      setCreateCourseSlug(response.data.slug);
-      setCreateCourseTitle(response.data.title);
-      acButtonRef.current.click();
-      e.target.reset();
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // 1
   
   const handleImageChange = (event) => {
     const file = event.target.files[0]; 
@@ -132,34 +78,11 @@ const InfoForm = ({
     setSelectedLanguage(value);
   }
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const id = parseInt(localStorage.getItem("teacher_id"), 10);
-      setTeacherId(id);
-    }
-  }, []);
-
-  useEffect(()=> {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get("/api/category/");
-        setCategories(response.data);
-        const response_level = await axiosInstance.get("/api/level/");
-        setLevels(response_level.data);
-        const response_lang = await axiosInstance.get("/api/language/");
-        setLanguages(response_lang.data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchData();
-  }, []);
-
   
 
   return (
     <>
-     {loading && (
+     {/* {loading && (
       <div className="d-flex bg-transparent"  style={{height: '100vh'}}>
         <Ripple
           color="rgba(12,235,115,1)"
@@ -168,8 +91,8 @@ const InfoForm = ({
           className="mx-auto align-self-center"
         />
       </div>
-     )}
-      <form onSubmit={handleSubmit} className="rbt-course-field-wrapper rbt-default-form">
+     )} */}
+      <form onSubmit={()=>{}} className="rbt-course-field-wrapper rbt-default-form">
         <div className="course-field mb--15">
           <label htmlFor="field-1">
             Kursyň ady
@@ -581,7 +504,7 @@ const InfoForm = ({
             </div>
           </div>
           <div className="col-lg-12">
-              <button
+              {/* <button
                 className="rbt-btn btn-gradient hover-icon-reverse w-100 text-center"
                 type="submit"
                 disabled={loading}
@@ -597,7 +520,7 @@ const InfoForm = ({
                     <i className="feather-arrow-right"></i>
                   </span>
                 </span>
-              </button>
+              </button> */}
             </div>
         </div>
       </div>
@@ -607,3 +530,83 @@ const InfoForm = ({
 };
 
 export default InfoForm;
+
+
+// const [title, setTitle] = useState("");
+  // const [short_description, setShort_description] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [learning_outcomes, setLearning_outcomes] = useState("");
+  // const [teacherId, setTeacherId] = useState(null);
+  // const [requirements, setRequirements] = useState("");
+  // const [selectedLevel, setSelectedLevel] = useState(0);
+  // const [selectedLanguage, setSelectedLanguage] = useState(0);
+  // const [selectedValues, setSelectedValues] = useState([]);
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const [categories, setCategories] = useState([]);
+  // const [levels, setLevels] = useState([]);
+  // const [languages, setLanguages] = useState([]);
+  // const [paid, setPaid] = useState(true);
+  // const [certified, setCertified] = useState(true);
+  // const [price, setPrice] = useState(0);
+  // const [discount, setDiscount] = useState(0);
+  // const [preview, setPreview] = useState(null);
+  // const [start_date, setStart_date] = useState(null);
+  // const [loading, setLoading] = useState(false);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+    
+  //   if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
+  //     alert("Ähli maglumatlary doly giriziň! ")
+  //     return;
+  //   }
+
+  //   setLoading(true);
+    
+  //   const formData = new FormData();
+  //   formData.append('title', title);
+  //   formData.append('short_description', short_description);
+  //   formData.append('description', description);
+  //   formData.append('learning_outcomes', learning_outcomes);
+  //   formData.append('user', teacherId);
+  //   formData.append('requirements', requirements);
+  //   formData.append('level', selectedLevel);
+  //   formData.append('language', selectedLanguage);
+  //   selectedValues.forEach(value=>{
+  //     formData.append('category', value);
+  //   })
+  //   //formData.append('category', selectedValues);
+  //   formData.append('thumbnail', selectedImage);
+  //   formData.append('price', price);
+  //   formData.append('discount', discount);
+  //   formData.append('is_active', false);
+  //   formData.append('paid', paid);
+  //   formData.append('certified', certified);
+  //   formData.append('start_date', start_date);
+  //   // formData.forEach((value, key) => {
+  //   //   console.log(`${key}: ${value}`);
+  //   // });
+    
+  //   try {
+  //     const response = await axiosInstance.post(
+  //       "/api/courses/", 
+  //       formData, 
+  //       {
+  //         headers: {
+  //           'Content-Type':'multipart-data',
+  //         }  
+  //       }
+  //     );
+  //     setCreateCourseId(response.data.id);
+  //     setCreateCourseSlug(response.data.slug);
+  //     setCreateCourseTitle(response.data.title);
+  //     acButtonRef.current.click();
+  //     e.target.reset();
+
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }

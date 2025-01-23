@@ -7,10 +7,11 @@ import axiosInstance, { base_URL } from "@/utils/axiosInstance";
 import axios from "axios";
 
 const SingleLesson = ({
+    index,
     lesson,
-    setTrigger
+    deleteLesson
   }) => {
-  const { id, title, slug } = lesson;
+  const {  title } = lesson;
   // const { attributes, listeners, setNodeRef, transform, transition } =
   //   useSortable({ id });
 
@@ -18,17 +19,6 @@ const SingleLesson = ({
   //   transform: CSS.Transform.toString(transform),
   //   transition,
   // };
-
-  const deleteLesson = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axiosInstance.delete(`/api/lesson/${slug}/`);
-      setTrigger(true);
-    } catch (err) {
-      console.error(err);
-    }
-  }
 
   return (
     <>
@@ -57,11 +47,10 @@ const SingleLesson = ({
             }}
             >
               <a
-                onClick={(e)=> {
-                  e.preventDefault();
+                onClick={()=> {
                   const userConfirmed = window.confirm("Siz bu sapagy pozmak isleýärsiňizmi? ");
                   if (userConfirmed) {
-                    deleteLesson(e);
+                    deleteLesson(index);
                   }
                 }}
                 style={{
@@ -81,11 +70,6 @@ const SingleLesson = ({
                 data-bs-target="#Quiz"
               ></i>
             </li>
-            {/* 
-              <li>
-                <i className="feather-upload"></i>
-              </li> 
-            */}
           </ul>
         </div>
       </div>
@@ -94,3 +78,15 @@ const SingleLesson = ({
 };
 
 export default SingleLesson;
+
+
+// 1 const deleteLesson = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const response = await axiosInstance.delete(`/api/lesson/${slug}/`);
+//     setTrigger(true);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }

@@ -26,7 +26,7 @@ import SingleLesson from "./SingleLesson";
 import axiosInstance from "@/utils/axiosInstance";
 
 const Lesson = ({
-
+  setTopics,
   handleFileChange,
   handleImportClick,
   fileInputRef,
@@ -37,12 +37,13 @@ const Lesson = ({
   end,
   id,
   topic,
-  trigger,
   setTrigger,
-  createCourseId,
+  handleDelete
   //selectedCourseId
 
-  }) => {
+  
+}) => {
+  
   const [courseList, setCourseList] = useState(CourseData.courseDetails);
   const [hydrated, setHydrated] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -57,7 +58,7 @@ const Lesson = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
+  console.log(topic?.id);
 
   function handleDragEnd(event) {
     const { active, over } = event;
@@ -76,16 +77,37 @@ const Lesson = ({
     return null;
   }
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axiosInstance.delete(`/api/topics/${topic.slug}/`);
-      setTrigger(true);
+  const deleteLesson = (ind) => {
+    setTopics((prevTopics) => {
+      
+      const topicIndex = prevTopics.findIndex((topic) => topic.id === topic?.id);
+    
+      
+      if (topicIndex !== -1) {
+        const updatedTopics = [...prevTopics];
+        updatedTopics[topicIndex] = {
+          ...updatedTopics[topicIndex], 
+          
+          lessons: updatedTopics[topicIndex].lessons.filter(
+            (_, index) => index !== ind
+          ),
+        };
+    
+        return updatedTopics; 
+      }
+    
+      
+      return prevTopics;
+    });
 
-    } catch(err) {
+
+    try {
+
+    } catch (err) {
       console.error(err);
     }
-  }
+   }
+
 
   return (
     <>
@@ -112,11 +134,10 @@ const Lesson = ({
           ></span>
           <span 
             className="rbt-course-icon rbt-course-del"
-            onClick={(e)=> {
-              e.preventDefault();
+            onClick={()=> {
               const userConfirmed = window.confirm("Siz bu topigi pozmak isleýärsiňizmi? ");
               if (userConfirmed) {
-                handleDelete(e);
+                handleDelete(topic?.id);
               }
             }}
           >
@@ -135,18 +156,19 @@ const Lesson = ({
               onDragEnd={handleDragEnd}
               modifiers={[restrictToVerticalAxis]}
             >
-              {/* .slice(start, end) */}
+              
               <SortableContext
                 items={topic?.lessons}
                 strategy={verticalListSortingStrategy}
                 >
                 {
                   topic?.lessons.length ===0 ? (<></>) :
-                  topic?.lessons.map((lesson) => (
+                  topic?.lessons.map((lesson,ind) => (
                    <SingleLesson 
-                    key={lesson.id} 
+                    key={ind} 
                     lesson={lesson} 
-                    setTrigger={setTrigger}
+                    index={ind}
+                    deleteLesson={deleteLesson}
                   />
                 ))}
               </SortableContext>
@@ -230,13 +252,15 @@ const Lesson = ({
         </div>
       </div>
       <LessonModal 
-        topicId={topic?.id} 
-        createCourseId={createCourseId} 
-        //selectedCourseId={selectedCourseId} 
-        setTrigger={setTrigger}
+        topicId={topic?.id}
+        topic={topic}
+        setTopics={setTopics}
       />
     </>
   );
 };
 
 export default Lesson;
+
+
+

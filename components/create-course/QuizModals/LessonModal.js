@@ -9,9 +9,7 @@ import axiosInstance from "@/utils/axiosInstance";
 
 const LessonModal = ({
   topicId,
-  createCourseId,
-  selectedCourseId,
-  setTrigger
+  setTopics
 }) => {
   const fileInputRef = useRef(null);
   const titleInputRef =useRef(null);
@@ -22,16 +20,17 @@ const LessonModal = ({
   const [lessonOrder, setLessonOrder] = useState(123123123);
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("Faýl saýlanylmadyk! ");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("video");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const lessonPost = async () => {
   
+  const lessonPost = (topicId) => {
+    console.log("Topic ID:", topicId);
     setIsSubmitting(true);
-
+  
     if (!file) {
-      alert('Faýly giriziň!');
+      alert("Faýly giriziň!");
       return;
     }
   
@@ -40,45 +39,44 @@ const LessonModal = ({
       return;
     }
   
-    if (!selectedCourseId && !createCourseId) {
-      setError("Topigiň kursyny giriziň!");
-      return;
-    }
-  
-    if (!topicId) {
-      setError("Topigi saýlaň!");
-      return;
-    }
-  
-    const course = selectedCourseId ? selectedCourseId : createCourseId ? createCourseId : 0;
     const order = parseInt(lessonOrder, 10);
   
-    
-    const formData = new FormData();
-    formData.append('title', lessonTitle);
-    formData.append('topic', topicId);
-    formData.append('course', course);
-    formData.append('order', order);
-    formData.append('material', file); 
-    formData.append('type', 'video'); 
+    const formData = {
+      title: lessonTitle,
+      order: order,
+      material: file,
+      type: type,
+    };
   
     try {
-      const response = await axiosInstance.post(
-        "/api/lesson/", 
-        formData, 
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      setTopics((prevTopics) => {
+        console.log("Previous Topics:", prevTopics);
+        console.log("Updating Topic ID:", topicId);
+  
+        const topicIndex = prevTopics.findIndex((topic) => topic.id === topicId);
+        console.log("Found Topic Index:", topicIndex);
+  
+        if (topicIndex !== -1) {
+          const updatedTopics = [...prevTopics];
+          updatedTopics[topicIndex] = {
+            ...updatedTopics[topicIndex],
+            lessons: [...updatedTopics[topicIndex].lessons, formData],
+          };
+  
+          console.log("Updated Topics:", updatedTopics);
+          return updatedTopics;
         }
-      );
-      
-      setLessonTitle(""); 
-      titleInputRef.current.value="";
-      setLessonOrder(123123123); 
-      orderInputRef.current.value="";
-      setTrigger(true); 
-      setFile(null); 
+  
+        console.warn("Topic ID not found:", topicId);
+        return prevTopics;
+      });
+  
+      // Reset form fields
+      setLessonTitle("");
+      titleInputRef.current.value = "";
+      setLessonOrder(123123123);
+      orderInputRef.current.value = "";
+      setFile(null);
       setFileName("Faýl saýlanylmadyk! ");
       closeModalButtonRef.current.click();
     } catch (err) {
@@ -96,11 +94,8 @@ const LessonModal = ({
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFileName(file.name);
+    setFileName(file?.name);
     setFile(file);
-    // if (file) {
-    //   console.log("Selected file:", file.name);
-    // }
   };
   return (
     <>
@@ -239,80 +234,6 @@ const LessonModal = ({
                         <i className="feather-info"> </i> 
                         Girizmeli faýlyň görnüşini saýlaň
                       </small>
-                    {/* <div className="course-field mb--20">
-                      <h6>Video Source</h6>
-                      <div className="rbt-modern-select bg-transparent height-45 w-100 mb--10">
-                        <select className="w-100">
-                          <option>Select Video Source</option>
-                          <option>External URL </option>
-                          <option>Youtube </option>
-                          <option>Vimo</option>
-                          <option>facebook</option>
-                          <option>twitter</option>
-                        </select>
-                      </div>
-                    </div> */}
-                    {/* <div className="course-field mb--15">
-                      <label>Video playback time</label>
-                      <div className="row row--15">
-                        <div className="col-lg-4">
-                          <input type="number" placeholder="00" />
-                          <small className="d-block mt_dec--5">
-                            <i className="feather-info"></i> Hour.
-                          </small>
-                        </div>
-                        <div className="col-lg-4">
-                          <input type="number" placeholder="00" />
-                          <small className="d-block mt_dec--5">
-                            <i className="feather-info"></i> Minute.
-                          </small>
-                        </div>
-                        <div className="col-lg-4">
-                          <input type="number" placeholder="00" />
-                          <small className="d-block mt_dec--5">
-                            <i className="feather-info"></i> Second.
-                          </small>
-                        </div>
-                      </div>
-                    </div> */}
-                    {/* <div className="course-field mb--20">
-                      <h6>Upload exercise files to the Lesson</h6>
-                      <div className="rbt-modern-select bg-transparent height-45 w-100 mb--10">
-                        <button
-                          className="rbt-btn btn-md btn-border hover-icon-reverse"
-                          onClick={handleImportClick}
-                        >
-                          <span className="icon-reverse-wrapper">
-                            <span className="btn-text">Upload Attachments</span>
-                            <span className="btn-icon">
-                              <i className="feather-paperclip"></i>
-                            </span>
-                            <span className="btn-icon">
-                              <i className="feather-paperclip"></i>
-                            </span>
-                          </span>
-                        </button>
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          style={{ display: "none" }}
-                          onChange={handleFileChange}
-                        />
-                      </div>
-                    </div> */}
-                    {/* <div className="course-field mb--20">
-                      <p className="rbt-checkbox-wrapper mb--5 d-flex">
-                        <input
-                          id="rbt-checkbox-11"
-                          name="rbt-checkbox-11"
-                          type="checkbox"
-                          defaultValue="yes"
-                        />
-                        <label htmlFor="rbt-checkbox-11">
-                          Enable Course Preview
-                        </label>
-                      </p>
-                    </div> */}
                     
                   </div>
                 </div>
@@ -332,8 +253,7 @@ const LessonModal = ({
                 <button 
                   type="button" 
                   className="rbt-btn btn-md"
-                  onClick={lessonPost}
-                  disabled={isSubmitting}
+                  onClick={()=>{lessonPost(topicId)}}
                 >
                   Sapagy goş
                 </button>

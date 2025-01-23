@@ -3,10 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 
 const TopicModal = ({
-  createCourseId,
-  //selectedCourseId,
-  trigger,
-  setTrigger
+  setTopics,
+  topics
 }) => {
 
   const [topicTitle, setTopicTitle] = useState("");
@@ -14,18 +12,16 @@ const TopicModal = ({
   const [error, setError] = useState("");
   const closeModalButtonRef = useRef(null);
 
-  
+  const topicId = topics.length + 1;
 
-  const topicPost = async (e) => {
-
-    if (!createCourseId) {
-      return;
-    }
+  const topicPost = async () => {
 
     const formData = {
+      id:topicId,
       title:topicTitle,
-      course:createCourseId,
-      order:parseInt(topicOrder,10)
+      order:parseInt(topicOrder,10),
+      //course:0,
+      lessons:[]
     }
 
 
@@ -35,19 +31,10 @@ const TopicModal = ({
         setError("Topigiň adyny giriziň! ");
       }
 
-      if (!formData?.course) {
-        setError("Topigiň kursyny giriziň! ");
-      }
-
-      if (formData?.title && formData?.course) {
-        const response = await axiosInstance.post("/api/topics/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+      if (formData?.title) {
+        setTopics((oldTopics)=> [...oldTopics, formData])
         setTopicTitle("");
         setTopicOrder(123123123);
-        setTrigger(true);
         closeModalButtonRef.current.click();
 
       }

@@ -22,6 +22,7 @@ import Lesson from "./lesson/Lesson";
 import AsyncSelect from 'react-select/async';
 import axiosInstance from "@/utils/axiosInstance";
 import { useAppContext } from "@/context/Context";
+import { Ripple } from "react-css-spinners";
 
 const CreateCourse = () => {
   const { isLightTheme, toggleTheme } = useAppContext();
@@ -31,87 +32,261 @@ const CreateCourse = () => {
   const [createCourseSlug, setCreateCourseSlug] = useState("");
   const [createCourseTitle, setCreateCourseTitle] = useState("");
   const [trigger, setTrigger] = useState(false);
+  
   const [topics, setTopics] = useState([]);
-  //const [selectedOption, setSelectedOption] = useState(null); 
-  //const [selectedCourse, setSelectedCourse] = useState("");
-  console.log(topics)
-  useEffect(() => {
-    if (trigger || createCourseSlug) {
-      const fetchData = async () => {
-        try {
-
-          const response = await axiosInstance.get(`/api/courses/${createCourseSlug}/`);
-          setTopics(response.data.topics);
-
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      fetchData();
-      setTrigger(false);
-    }
-  }, [trigger, createCourseSlug]);
-
-  const previewImages = CreateCourseData.createCourse[0].landscape.filter(
-    (item) => item.type === "preview"
-  );
-  const portImages = CreateCourseData.createCourse[0].landscape.filter(
-    (item) => item.type === "port"
-  );
+  
 
 
-  const handleImportClick = (e) => {
-    e.preventDefault();
-    fileInputRef.current.click();
-  };
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const [selectedTopicId, setSelectedTopicId] = useState(null);
+
+  const openLessonModal = (topicId) => {
+    setSelectedTopicId(topicId); 
   };
 
- 
-    const customStyles = {
-      control: (provided) => ({
-        ...provided,
-        height: '40px', 
-        minHeight: '40px', 
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 8px',
-      }),
-      placeholder: (provided) => ({
-        ...provided,
-        fontSize: '14px',
-        display: 'flex', 
-        alignItems: 'center',
-        marginBottom:'10px'
-      }),
-      singleValue: (provided) => ({
-        ...provided,
-        fontSize: '16px', 
-        display: 'flex',
-        alignItems: 'center',
-      }),
-      input: (provided) => ({
-        ...provided,
-        marginTop: '-10px',
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: '14px',
-      }),
-      dropdownIndicator: (provided) => ({
-        ...provided,
-        padding: '0 8px',
-        paddingBottom:"10px",
-        display: 'flex', 
-        alignItems: 'center',
-      }),
-      indicatorSeparator: (provided) => ({
-        ...provided,
-        display: 'none',
-      }),
-    };
+
+
+  //create-course
+  const [title, setTitle] = useState("");
+  const [short_description, setShort_description] = useState("");
+  const [description, setDescription] = useState("");
+  const [learning_outcomes, setLearning_outcomes] = useState("");
+  const [teacherId, setTeacherId] = useState(null);
+  const [requirements, setRequirements] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState(0);
+  const [selectedLanguage, setSelectedLanguage] = useState(0);
+  const [selectedValues, setSelectedValues] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [levels, setLevels] = useState([]);
+  const [languages, setLanguages] = useState([]);
+  const [paid, setPaid] = useState(true);
+  const [certified, setCertified] = useState(true);
+  const [price, setPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [preview, setPreview] = useState(null);
+  const [start_date, setStart_date] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    //e.preventDefault();
 
     
+    if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
+      alert("Ähli maglumatlary doly giriziň! ")
+      return;
+    }
+
+    setLoading(true);
+    
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('short_description', short_description);
+    formData.append('description', description);
+    formData.append('learning_outcomes', learning_outcomes);
+    formData.append('user', teacherId);
+    formData.append('requirements', requirements);
+    formData.append('level', selectedLevel);
+    formData.append('language', selectedLanguage);
+    selectedValues.forEach(value=>{
+      formData.append('category', value);
+    })
+    //formData.append('category', selectedValues);
+    formData.append('thumbnail', selectedImage);
+    formData.append('price', price);
+    formData.append('discount', discount);
+    formData.append('is_active', false);
+    formData.append('paid', paid);
+    formData.append('certified', certified);
+    formData.append('start_date', start_date);
+    // formData.forEach((value, key) => {
+    //   console.log(`${key}: ${value}`);
+    // });
+    
+    try {
+      const response = await axiosInstance.post(
+        "/api/courses/", 
+        formData, 
+        {
+          headers: {
+            'Content-Type':'multipart-data',
+          }  
+        }
+      );
+      setCreateCourseId(response.data.id);
+      setCreateCourseSlug(response.data.slug);
+      setCreateCourseTitle(response.data.title);
+      acButtonRef.current.click();
+      //e.target.reset();
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  console.log(topics);
+
+  // const topicPost = async (e) => {
+
+  //   if (!createCourseId) {
+  //     return;
+  //   }
+
+  //   const formData = {
+  //     title:topicTitle,
+  //     course:createCourseId,
+  //     order:parseInt(topicOrder,10)
+  //   }
+
+
+  //   try {
+      
+  //     if (!formData?.title) {
+  //       setError("Topigiň adyny giriziň! ");
+  //     }
+
+  //     if (!formData?.course) {
+  //       setError("Topigiň kursyny giriziň! ");
+  //     }
+
+  //     if (formData?.title && formData?.course) {
+  //       const response = await axiosInstance.post("/api/topics/", formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       });
+  //       setTopicTitle("");
+  //       setTopicOrder(123123123);
+  //       setTrigger(true);
+  //       closeModalButtonRef.current.click();
+
+  //     }
+
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
+
+  // const lessonPost = async () => {
+  
+  //   setIsSubmitting(true);
+
+  //   if (!file) {
+  //     alert('Faýly giriziň!');
+  //     return;
+  //   }
+  
+  //   if (!lessonTitle) {
+  //     setError("Sapagyň adyny giriziň!");
+  //     return;
+  //   }
+  
+  //   if (!selectedCourseId && !createCourseId) {
+  //     setError("Topigiň kursyny giriziň!");
+  //     return;
+  //   }
+  
+  //   if (!topicId) {
+  //     setError("Topigi saýlaň!");
+  //     return;
+  //   }
+  
+  //   const course = selectedCourseId ? selectedCourseId : createCourseId ? createCourseId : 0;
+  //   const order = parseInt(lessonOrder, 10);
+  
+    
+  //   const formData = new FormData();
+  //   formData.append('title', lessonTitle);
+  //   formData.append('topic', topicId);
+  //   formData.append('course', course);
+  //   formData.append('order', order);
+  //   formData.append('material', file); 
+  //   formData.append('type', 'video'); 
+  
+  //   try {
+  //     const response = await axiosInstance.post(
+  //       "/api/lesson/", 
+  //       formData, 
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+      
+  //     setLessonTitle(""); 
+  //     titleInputRef.current.value="";
+  //     setLessonOrder(123123123); 
+  //     orderInputRef.current.value="";
+  //     setTrigger(true); 
+  //     setFile(null); 
+  //     setFileName("Faýl saýlanylmadyk! ");
+  //     closeModalButtonRef.current.click();
+  //   } catch (err) {
+  //     console.error("Error during lesson post:", err);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const id = parseInt(localStorage.getItem("teacher_id"), 10);
+      setTeacherId(id);
+    }
+  }, []);
+
+  useEffect(()=> {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get("/api/category/");
+        setCategories(response.data);
+        const response_level = await axiosInstance.get("/api/level/");
+        setLevels(response_level.data);
+        const response_lang = await axiosInstance.get("/api/language/");
+        setLanguages(response_lang.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  }, []);
+
+
+  // useEffect(() => {
+  //   if (trigger || createCourseSlug) {
+  //     const fetchData = async () => {
+  //       try {
+
+  //         const response = await axiosInstance.get(`/api/courses/${createCourseSlug}/`);
+  //         setTopics(response.data.topics);
+
+  //       } catch (err) {
+  //         console.error(err);
+  //       }
+  //     }
+  //     fetchData();
+  //     setTrigger(false);
+  //   }
+  // }, [trigger, createCourseSlug]); //duzetmeli
+
+  
+  
+   // 1
+
+   const handleDelete = (ind) => {
+    try {
+      setTopics((prevTopics) =>
+      prevTopics.filter((topic) => topic.id !== ind)
+    );
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  console.log(topics);
     return (
       <>
       <div className="row g-5">
@@ -143,6 +318,29 @@ const CreateCourse = () => {
                       setCreateCourseSlug={setCreateCourseSlug}
                       setCreateCourseTitle={setCreateCourseTitle}
                       acButtonRef={acButtonRef}
+                      setTitle={setTitle}
+                      setShort_description={setShort_description}
+                      setDescription={setDescription}
+                      setLearning_outcomes={setLearning_outcomes}
+                      setRequirements={setRequirements}
+                      setSelectedLevel={setSelectedLevel}
+                      selectedLevel={selectedLevel}
+                      selectedLanguage={selectedLanguage}
+                      paid={paid}
+                      preview={preview}
+                      certified={certified}
+                      setSelectedLanguage={setSelectedLanguage}
+                      setSelectedValues={setSelectedValues}
+                      setSelectedImage={setSelectedImage}
+                      categories={categories}
+                      levels={levels}
+                      languages={languages}
+                      setPaid={setPaid}
+                      setCertified={setCertified}
+                      setPrice={setPrice}
+                      setDiscount={setDiscount}
+                      setPreview={setPreview}
+                      setStart_date={setStart_date}
                     />
                   </div>
                 </div>
@@ -174,7 +372,7 @@ const CreateCourse = () => {
                         padding:'20px'
                       }}>
 
-                        {!createCourseId ? 
+                        {createCourseId ? 
                         (
                           <>
                             <small
@@ -213,9 +411,11 @@ const CreateCourse = () => {
                                   return (
                                     <Lesson
                                       key={index}
+                                      topicId={topic?.id}
+                                      setTopics={setTopics}
                                       topic={topic}
-                                      handleFileChange={handleFileChange}
-                                      handleImportClick={handleImportClick}
+                                      // handleFileChange={handleFileChange}
+                                      // handleImportClick={handleImportClick}
                                       fileInputRef={fileInputRef}
                                       id={`accOne${index+1}`}
                                       target={`accCollapseOne${index+1}`}
@@ -226,6 +426,7 @@ const CreateCourse = () => {
                                       trigger={trigger}
                                       setTrigger={setTrigger}
                                       createCourseId={createCourseId}
+                                      handleDelete={handleDelete}
                                       //selectedCourseId={selectedOption}
                                     />
                                   )
@@ -340,7 +541,7 @@ const CreateCourse = () => {
                                   </label>
                                 </div>
                               </div>
-                              {CreateCourseData &&
+                              {/* {CreateCourseData &&
                                 previewImages.map((data, index) => (
                                   <div className="col-lg-4" key={index}>
                                     <div className="certificate-inner rbt-image-checkbox">
@@ -360,7 +561,7 @@ const CreateCourse = () => {
                                       </label>
                                     </div>
                                   </div>
-                                ))}
+                                ))} */}
                             </div>
                           </div>
 
@@ -387,7 +588,7 @@ const CreateCourse = () => {
                                   </label>
                                 </div>
                               </div>
-                              {CreateCourseData &&
+                              {/* {CreateCourseData &&
                                 portImages.map((data, index) => (
                                   <div className="col-lg-4" key={index}>
                                     <div className="certificate-inner rbt-image-checkbox">
@@ -407,7 +608,7 @@ const CreateCourse = () => {
                                       </label>
                                     </div>
                                   </div>
-                                ))}
+                                ))} */}
                             </div>
                           </div>
                         </div>
@@ -496,9 +697,8 @@ const CreateCourse = () => {
         </div>
       </div>
       <TopicModal 
-        createCourseId={createCourseId} 
-        trigger={trigger}
-        setTrigger={setTrigger}
+        setTopics={setTopics}
+        topics={topics}
         //selectedCourseId={selectedOption} 
       />
       <UpdateModal />
@@ -538,7 +738,64 @@ export default CreateCourse;
 
 
 
+// 1 const previewImages = CreateCourseData.createCourse[0].landscape.filter(
+  //   (item) => item.type === "preview"
+  // );
+  // const portImages = CreateCourseData.createCourse[0].landscape.filter(
+  //   (item) => item.type === "port"
+  // );
 
+
+  // const handleImportClick = (e) => {
+  //   e.preventDefault();
+  //   fileInputRef.current.click();
+  // };
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  // };
+
+ 
+    // const customStyles = {
+    //   control: (provided) => ({
+    //     ...provided,
+    //     height: '40px', 
+    //     minHeight: '40px', 
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     padding: '0 8px',
+    //   }),
+    //   placeholder: (provided) => ({
+    //     ...provided,
+    //     fontSize: '14px',
+    //     display: 'flex', 
+    //     alignItems: 'center',
+    //     marginBottom:'10px'
+    //   }),
+    //   singleValue: (provided) => ({
+    //     ...provided,
+    //     fontSize: '16px', 
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //   }),
+    //   input: (provided) => ({
+    //     ...provided,
+    //     marginTop: '-10px',
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     fontSize: '14px',
+    //   }),
+    //   dropdownIndicator: (provided) => ({
+    //     ...provided,
+    //     padding: '0 8px',
+    //     paddingBottom:"10px",
+    //     display: 'flex', 
+    //     alignItems: 'center',
+    //   }),
+    //   indicatorSeparator: (provided) => ({
+    //     ...provided,
+    //     display: 'none',
+    //   }),
+    // };
 
 
 
