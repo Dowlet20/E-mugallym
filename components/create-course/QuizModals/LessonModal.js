@@ -9,7 +9,8 @@ import axiosInstance from "@/utils/axiosInstance";
 
 const LessonModal = ({
   topicId,
-  setTopics
+  setTopics,
+  currentTopicId
 }) => {
   const fileInputRef = useRef(null);
   const titleInputRef =useRef(null);
@@ -23,10 +24,9 @@ const LessonModal = ({
   const [type, setType] = useState("video");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  
-  const lessonPost = (topicId) => {
-    console.log("Topic ID:", topicId);
+
+  const lessonPost = () => {
+    console.log("Topic ID:", currentTopicId);
     setIsSubmitting(true);
   
     if (!file) {
@@ -46,14 +46,15 @@ const LessonModal = ({
       order: order,
       material: file,
       type: type,
+      topicId:currentTopicId
     };
   
     try {
       setTopics((prevTopics) => {
         console.log("Previous Topics:", prevTopics);
-        console.log("Updating Topic ID:", topicId);
+        console.log("Updating Topic ID:", currentTopicId);
   
-        const topicIndex = prevTopics.findIndex((topic) => topic.id === topicId);
+        const topicIndex = prevTopics.findIndex((topic) => topic.id === currentTopicId);
         console.log("Found Topic Index:", topicIndex);
   
         if (topicIndex !== -1) {
@@ -67,7 +68,7 @@ const LessonModal = ({
           return updatedTopics;
         }
   
-        console.warn("Topic ID not found:", topicId);
+        console.warn("Topic ID not found:", currentTopicId);
         return prevTopics;
       });
   
@@ -97,6 +98,9 @@ const LessonModal = ({
     setFileName(file?.name);
     setFile(file);
   };
+
+
+
   return (
     <>
       <div
@@ -253,7 +257,7 @@ const LessonModal = ({
                 <button 
                   type="button" 
                   className="rbt-btn btn-md"
-                  onClick={()=>{lessonPost(topicId)}}
+                  onClick={lessonPost}
                 >
                   Sapagy goş
                 </button>

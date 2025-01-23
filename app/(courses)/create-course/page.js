@@ -11,7 +11,6 @@ const CreateCourseLayout = () => {
   return (
     <>
       <CreateCoursePage />
-      <BackToTop />
     </>
   );
 };

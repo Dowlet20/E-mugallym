@@ -9,36 +9,45 @@ import Link from "next/link";
 import { Ripple } from "react-css-spinners";
 
 const InfoForm = ({
-  setCreateCourseId,
-  setCreateCourseSlug,
-  setCreateCourseTitle,
   acButtonRef,
   setTitle,
+  title,
   setShort_description,
+  short_description,
   setDescription,
+  description,
   setLearning_outcomes,
+  learning_outcomes,
   setRequirements,
+  requirements,
   setSelectedLevel,
   setSelectedLanguage,
   setSelectedValues,
   setSelectedImage,
+  selectedImage,
   categories,
   levels,
   languages,
   setPaid,
   setCertified,
   setPrice,
+  price,
   setDiscount,
   setPreview,
   setStart_date,
   selectedLevel,
   selectedLanguage,
+  selectedValues,
   paid,
   preview,
-  certified
+  certified,
+  error,
+  setError,
+  discount,
+  start_date
 }) => {
+
   const [inp, setInp] = useState(100);
-  // 1
   
   const handleImageChange = (event) => {
     const file = event.target.files[0]; 
@@ -101,10 +110,14 @@ const InfoForm = ({
             id="field-1"  
             type="text" 
             placeholder="Täze kurs" 
+            value={title}
             onChange={(e)=>setTitle(e.target.value)}
+            style={{
+              borderColor: !error.kurs_title && !title ? "red" : "",
+            }} 
           />
           <small className="d-block mt_dec--5">
-            <i className="feather-info"></i> 
+            <i className="feather-info"> </i> 
             Ady 30 simwoldan ybarat bolmaly.
           </small>
         </div>
@@ -117,17 +130,30 @@ const InfoForm = ({
           <textarea 
             id="aboutCourse" 
             rows="10"
+            value={short_description}
             onChange={(e)=>setShort_description(e.target.value)}
+            style={{
+              borderColor: !error.short_description && !short_description ? "red" : "",
+            }} 
           >
           </textarea>
           <small className="d-block mt_dec--5">
-            <i className="feather-info"></i> 
+            <i className="feather-info"> </i> 
             HTML ýa-da ýönekeý tekste rugsat berilýär, şekiljikler goýmaly däl. Bu meýdan gözlemek üçin ulanylýar, şonuň üçin gysga we manynyly düşündiriň!
           </small>
         </div>
 
         <div className="course-field mb--20">
-          <h6>Kategoriýalary saýlaň</h6>
+          <h6>
+            Kategoriýalary saýlaň <span> </span>
+            <span
+              style={{
+                color: !error.selectedValues && selectedValues.length===0 ? "red" : "",
+              }} 
+            >
+              {!error.selectedValues && selectedValues.length===0 && "Iň bolmanda bir kategoriýa saýlaň! "}
+            </span>
+          </h6>
           <div style={{ marginTop: '2rem', marginLeft: '1rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               {categories.length===0 ? [] : 
@@ -190,6 +216,9 @@ const InfoForm = ({
                           onChange={handleLevelSelect} 
                           className="w-100" 
                           id="field-4"
+                          style={{
+                            borderColor: !error.selectedLevel && !selectedLevel ? "#FF7F7F" : "",
+                          }} 
                         >
                           <option key={""} value={0}>
                               Derejesini saýlaň
@@ -231,6 +260,9 @@ const InfoForm = ({
                           onChange={handleLanguageSelect} 
                           className="w-100" 
                           id="field-4"
+                          style={{
+                            borderColor: !error.selectedLanguage && !selectedLanguage ? "#FF7F7F" : "",
+                          }} 
                         >
                           <option key={""} value={0}>
                               Dili saýlaň
@@ -310,19 +342,28 @@ const InfoForm = ({
               </div>
               <div className="col-lg-8">
                 <div className="tab-content">
+                  {paid && (
+
                   <div
                     className="tab-pane fade advance-tab-content-1 active show"
                     id="paid"
                     role="tabpanel"
                     aria-labelledby="paid-tab"
+                    style={{
+                      marginTop:'10px'
+                    }}
                   >
                     <div className="course-field mb--15">
                       <label htmlFor="regularPrice-1">Adaty baha (TMT)</label>
                       <input
                         id="regularPrice-1"
                         type="number"
+                        //value={price}
                         placeholder="$ Adaty baha"
                         onChange={(e)=>setPrice(price=>e.target.value)}
+                        style={{
+                          borderColor: !error.price && !price ? "red" : "",
+                        }} 
                       />
                       <small className="d-block mt_dec--5">
                         <i className="feather-info"></i> Okuwyň bahasy aýlyk haklaryny öz içine alýar.
@@ -336,6 +377,7 @@ const InfoForm = ({
                       <input
                         id="discountedPrice-1"
                         type="number"
+                        //value={discount}
                         placeholder="$ Arzanladyş bahasy"
                         onChange={(e)=>setDiscount(discount=>e.target.value)}
                       />
@@ -345,12 +387,16 @@ const InfoForm = ({
                       </small>
                     </div>
                   </div>
+                  )}
 
                   <div
                     className="tab-pane fade advance-tab-content-1"
                     id="free"
                     role="tabpanel"
                     aria-labelledby="free-tab"
+                    style={{
+                      marginTop:'10px'
+                    }}
                   >
                     <div className="course-field">
                       <p className="b3">Bu okuw hemmeler üçin mugt.</p>
@@ -363,7 +409,7 @@ const InfoForm = ({
         </div>
 
         <div className="course-field mb--20">
-          <h6>Kursyň suraty</h6>
+          <h6>Kursyň suraty {!error.selectedImage && !selectedImage && (<span style={{color:'red'}}>Suraty giriziň!</span>) }</h6>
           <div className="rbt-create-course-thumbnail upload-area">
             <div className="upload-area">
               <div className="brows-file-wrapper" data-black-overlay="9">
@@ -374,6 +420,10 @@ const InfoForm = ({
                   id="createinputfile"
                   type="file"
                   className="inputfile"
+                  //value={selectedImage}
+                  style={{
+                    borderColor: !error.selectedImage && !selectedImage ? "red" : "",
+                  }} 
                 />
                 <Image
                   id="createfileImage"
@@ -414,14 +464,16 @@ const InfoForm = ({
                 type="date" 
                 id="startDate" 
                 name="startDate"
+                //value={start_date}
                 onChange={(e)=>{setStart_date(e.target.value)}}
               />
             </div>
           </div>
 
           <div className="col-lg-3">
-            <div className="course-field mb--15">
+            <div>
               <button
+                type="button"
                 className={certified ? "bg-primary border text-white w-100 p-3" : "border p-3 w-100"}
                 onClick={() => setCertified(true)}
                 style={{
@@ -438,8 +490,9 @@ const InfoForm = ({
           </div>
 
           <div className="col-lg-3">
-            <div className="course-field mb--15">
+            <div >
               <button
+                type="button"
                 className={!certified ? "bg-primary border text-white w-100 p-3" : "border p-3 w-100"}
                 onClick={() => setCertified(false)}
                 style={{
@@ -462,8 +515,12 @@ const InfoForm = ({
               <textarea
                 id="whatLearn"
                 rows="5"
+                value={requirements}
                 placeholder="Kursyň peýdalaryny goşuň."
                 onChange={(e)=>setRequirements(e.target.value)}
+                style={{
+                  borderColor: !error.requirements && !requirements ? "red" : "",
+                }} 
               ></textarea>
               <small className="d-block mt_dec--5">
                 <i className="feather-info"></i> 
@@ -477,9 +534,13 @@ const InfoForm = ({
               <label htmlFor="description">Düşündiriliş</label>
               <textarea
                 id="description"
+                value={description}
                 rows="5"
                 placeholder="Kursyň peýdalaryny goşuň."
                 onChange={(e)=>setDescription(e.target.value)}
+                style={{
+                  borderColor: !error.description && description ? "red" : "",
+                }} 
               ></textarea>
               <small className="d-block mt_dec--5">
                 <i className="feather-info"></i> 
@@ -494,8 +555,12 @@ const InfoForm = ({
               <textarea
                 id="description"
                 rows="5"
+                value={learning_outcomes}
                 placeholder="Kursyň peýdalaryny goşuň."
                 onChange={(e)=>setLearning_outcomes(e.target.value)}
+                style={{
+                  borderColor: !error.learning_outcomes && !learning_outcomes ? "red" : "",
+                }} 
               ></textarea>
               <small className="d-block mt_dec--5">
                 <i className="feather-info"></i> 

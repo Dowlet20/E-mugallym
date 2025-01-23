@@ -11,7 +11,7 @@ const SingleLesson = ({
     lesson,
     deleteLesson
   }) => {
-  const {  title } = lesson;
+  const {  title, topicId } = lesson;
   // const { attributes, listeners, setNodeRef, transform, transition } =
   //   useSortable({ id });
 
@@ -50,7 +50,7 @@ const SingleLesson = ({
                 onClick={()=> {
                   const userConfirmed = window.confirm("Siz bu sapagy pozmak isleýärsiňizmi? ");
                   if (userConfirmed) {
-                    deleteLesson(index);
+                    deleteLesson(index, topicId);
                   }
                 }}
                 style={{

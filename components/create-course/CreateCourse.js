@@ -1,5 +1,9 @@
 "use client";
 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import BackToTopCR from "./BackToTopCR";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,12 +23,12 @@ import QuizModal from "./QuizModals/QuizModal";
 import AssignmentModal from "./QuizModals/AssignmentModal";
 import UpdateModal from "./QuizModals/UpdateModal";
 import Lesson from "./lesson/Lesson";
-import AsyncSelect from 'react-select/async';
 import axiosInstance from "@/utils/axiosInstance";
 import { useAppContext } from "@/context/Context";
 import { Ripple } from "react-css-spinners";
 
 const CreateCourse = () => {
+  const progressRef = useRef(null);
   const { isLightTheme, toggleTheme } = useAppContext();
   const fileInputRef = useRef(null);
   const acButtonRef = useRef(null);
@@ -34,14 +38,6 @@ const CreateCourse = () => {
   const [trigger, setTrigger] = useState(false);
   
   const [topics, setTopics] = useState([]);
-  
-
-
-  const [selectedTopicId, setSelectedTopicId] = useState(null);
-
-  const openLessonModal = (topicId) => {
-    setSelectedTopicId(topicId); 
-  };
 
 
 
@@ -66,13 +62,184 @@ const CreateCourse = () => {
   const [preview, setPreview] = useState(null);
   const [start_date, setStart_date] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [currentTopicId, setCurrentTopicId] = useState(null);
 
-  const handleSubmit = async () => {
-    //e.preventDefault();
+  const [error, setError] = useState({
+    kurs_title:true,
+    short_description:true,
+    description:true,
+    learning_outcomes:true,
+    teacherId: true,
+    requirements:true,
+    selectedLevel: true,
+    selectedLanguage:true,
+    selectedValues:true,
+    selectedImage:true,
+    price:true
+  });
 
+  const lessonPost = async (title, topicId, course, order, file, type="video") => {
+  
     
-    if (!title || !short_description || !description || !learning_outcomes || !teacherId || !requirements || !selectedLevel || !selectedLanguage || selectedValues.length ===0 || !selectedImage || !start_date) {
-      alert("Ähli maglumatlary doly giriziň! ")
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('topic', topicId);
+    formData.append('course', course);
+    formData.append('order', order);
+    formData.append('material', file); 
+    formData.append('type', type); 
+  
+    try {
+      const response = await axiosInstance.post(
+        "/api/lesson/", 
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      
+      //setLessonTitle(""); 
+      //titleInputRef.current.value="";
+      //setLessonOrder(123123123); 
+      //orderInputRef.current.value="";
+      //setFile(null); 
+      //setFileName("Faýl saýlanylmadyk! ");
+      //closeModalButtonRef.current.click();
+    } catch (err) {
+      console.error("Error during lesson post:", err);
+    } 
+  };
+
+  const topicPost = async (title, course, order) => {
+
+    const formData = {
+      title: title,
+      course: course,
+      order: order
+    }
+
+
+    try {
+
+      if (formData?.title && formData?.course) {
+        const response = await axiosInstance.post("/api/topics/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        //setTopicTitle("");
+        //setTopicOrder(123123123);
+        return response.data?.id;
+      }
+
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+
+    if (!title) {
+      setError((prevError)=> ({
+        ...prevError,
+        kurs_title:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+
+    if (!short_description) {
+      setError((prevError)=> ({
+        ...prevError,
+        short_description:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+
+    if (selectedValues.length===0) {
+      setError((prevError)=> ({
+        ...prevError,
+        selectedValues:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+    
+    if (!selectedLevel) {
+      setError((prevError)=> ({
+        ...prevError,
+        selectedLevel:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+    
+    if (!selectedLanguage) {
+      setError((prevError)=> ({
+        ...prevError,
+        selectedLanguage:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+   
+    if (paid && !price) {
+      setError((prevError)=> ({
+        ...prevError,
+        price:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+    
+    if (!selectedImage) {
+      setError((prevError)=> ({
+        ...prevError,
+        selectedImage:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+    
+    if (!requirements) {
+      setError((prevError)=> ({
+        ...prevError,
+        requirements:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+
+    if (!description) {
+      setError((prevError)=> ({
+        ...prevError,
+        description:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+    
+    if (!learning_outcomes) {
+      setError((prevError)=> ({
+        ...prevError,
+        learning_outcomes:false
+      }));
+      progressRef.current.click();
+      return;
+    }
+
+    if (!teacherId) {
+      setError((prevError)=> ({
+        ...prevError,
+        teacherId:false
+      }));
+      progressRef.current.click();
       return;
     }
 
@@ -90,7 +257,6 @@ const CreateCourse = () => {
     selectedValues.forEach(value=>{
       formData.append('category', value);
     })
-    //formData.append('category', selectedValues);
     formData.append('thumbnail', selectedImage);
     formData.append('price', price);
     formData.append('discount', discount);
@@ -98,9 +264,6 @@ const CreateCourse = () => {
     formData.append('paid', paid);
     formData.append('certified', certified);
     formData.append('start_date', start_date);
-    // formData.forEach((value, key) => {
-    //   console.log(`${key}: ${value}`);
-    // });
     
     try {
       const response = await axiosInstance.post(
@@ -112,124 +275,42 @@ const CreateCourse = () => {
           }  
         }
       );
-      setCreateCourseId(response.data.id);
-      setCreateCourseSlug(response.data.slug);
-      setCreateCourseTitle(response.data.title);
-      acButtonRef.current.click();
-      //e.target.reset();
+      
+      const courseId= response.data?.id;
 
+      for (const topic of topics) {
+
+        const topicId = await topicPost(topic?.title, courseId, topic?.order);
+        for (const lesson of topic.lessons) {
+
+          await lessonPost(lesson?.title, topicId, courseId, lesson?.order, lesson?.material, lesson?.type)
+        }
+      }
+      
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+      setTitle("");
+      setShort_description("");
+      setDescription("");
+      setLearning_outcomes("");
+      setRequirements("");
+      setSelectedLevel(0);
+      setSelectedLanguage(0);
+      setSelectedValues([]);
+      setSelectedImage(null);
+      setPrice(0);
+      setDiscount(0);
+      setPreview(null);
+      setStart_date(null);
+      setTopics([]);
+      setCurrentTopicId(null);
+      toast.success("Siziň kursyňyz döredildi! ", {
+        autoClose: 3000
+      })
     }
   }
-
-  console.log(topics);
-
-  // const topicPost = async (e) => {
-
-  //   if (!createCourseId) {
-  //     return;
-  //   }
-
-  //   const formData = {
-  //     title:topicTitle,
-  //     course:createCourseId,
-  //     order:parseInt(topicOrder,10)
-  //   }
-
-
-  //   try {
-      
-  //     if (!formData?.title) {
-  //       setError("Topigiň adyny giriziň! ");
-  //     }
-
-  //     if (!formData?.course) {
-  //       setError("Topigiň kursyny giriziň! ");
-  //     }
-
-  //     if (formData?.title && formData?.course) {
-  //       const response = await axiosInstance.post("/api/topics/", formData, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       });
-  //       setTopicTitle("");
-  //       setTopicOrder(123123123);
-  //       setTrigger(true);
-  //       closeModalButtonRef.current.click();
-
-  //     }
-
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
-  // const lessonPost = async () => {
-  
-  //   setIsSubmitting(true);
-
-  //   if (!file) {
-  //     alert('Faýly giriziň!');
-  //     return;
-  //   }
-  
-  //   if (!lessonTitle) {
-  //     setError("Sapagyň adyny giriziň!");
-  //     return;
-  //   }
-  
-  //   if (!selectedCourseId && !createCourseId) {
-  //     setError("Topigiň kursyny giriziň!");
-  //     return;
-  //   }
-  
-  //   if (!topicId) {
-  //     setError("Topigi saýlaň!");
-  //     return;
-  //   }
-  
-  //   const course = selectedCourseId ? selectedCourseId : createCourseId ? createCourseId : 0;
-  //   const order = parseInt(lessonOrder, 10);
-  
-    
-  //   const formData = new FormData();
-  //   formData.append('title', lessonTitle);
-  //   formData.append('topic', topicId);
-  //   formData.append('course', course);
-  //   formData.append('order', order);
-  //   formData.append('material', file); 
-  //   formData.append('type', 'video'); 
-  
-  //   try {
-  //     const response = await axiosInstance.post(
-  //       "/api/lesson/", 
-  //       formData, 
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-      
-  //     setLessonTitle(""); 
-  //     titleInputRef.current.value="";
-  //     setLessonOrder(123123123); 
-  //     orderInputRef.current.value="";
-  //     setTrigger(true); 
-  //     setFile(null); 
-  //     setFileName("Faýl saýlanylmadyk! ");
-  //     closeModalButtonRef.current.click();
-  //   } catch (err) {
-  //     console.error("Error during lesson post:", err);
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -255,26 +336,6 @@ const CreateCourse = () => {
   }, []);
 
 
-  // useEffect(() => {
-  //   if (trigger || createCourseSlug) {
-  //     const fetchData = async () => {
-  //       try {
-
-  //         const response = await axiosInstance.get(`/api/courses/${createCourseSlug}/`);
-  //         setTopics(response.data.topics);
-
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-  //     }
-  //     fetchData();
-  //     setTrigger(false);
-  //   }
-  // }, [trigger, createCourseSlug]); //duzetmeli
-
-  
-  
-   // 1
 
    const handleDelete = (ind) => {
     try {
@@ -286,9 +347,32 @@ const CreateCourse = () => {
     }
   }
 
-  console.log(topics);
     return (
-      <>
+      <div style={{ position: "relative" }}>
+        <ToastContainer autoClose={3000} />
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <Ripple
+            color="rgba(12,235,115,1)"
+            size={115}
+            thickness={7}
+            className="mx-auto align-self-center"
+          />
+        </div>
+      )}
       <div className="row g-5">
         <div className="col-lg-8">
           <div className="rbt-accordion-style rbt-accordion-01 rbt-accordion-06 accordion">
@@ -314,33 +398,42 @@ const CreateCourse = () => {
                 >
                   <div className="accordion-body card-body">
                     <InfoForm 
-                      setCreateCourseId={setCreateCourseId} 
-                      setCreateCourseSlug={setCreateCourseSlug}
-                      setCreateCourseTitle={setCreateCourseTitle}
                       acButtonRef={acButtonRef}
                       setTitle={setTitle}
+                      title={title}
                       setShort_description={setShort_description}
+                      short_description={short_description}
                       setDescription={setDescription}
+                      description={description}
                       setLearning_outcomes={setLearning_outcomes}
+                      learning_outcomes={learning_outcomes}
                       setRequirements={setRequirements}
+                      requirements={requirements}
                       setSelectedLevel={setSelectedLevel}
                       selectedLevel={selectedLevel}
                       selectedLanguage={selectedLanguage}
+                      selectedValues={selectedValues}
                       paid={paid}
                       preview={preview}
                       certified={certified}
                       setSelectedLanguage={setSelectedLanguage}
                       setSelectedValues={setSelectedValues}
                       setSelectedImage={setSelectedImage}
+                      selectedImage={selectedImage}
                       categories={categories}
                       levels={levels}
                       languages={languages}
                       setPaid={setPaid}
                       setCertified={setCertified}
                       setPrice={setPrice}
+                      price={price}
                       setDiscount={setDiscount}
                       setPreview={setPreview}
                       setStart_date={setStart_date}
+                      error={error}
+                      setError={setError}
+                      discount={discount}
+                      start_date={start_date}
                     />
                   </div>
                 </div>
@@ -403,7 +496,7 @@ const CreateCourse = () => {
                               className="accordion-header card-header"
                               style={{ fontSize: '2.0rem' }}
                             >
-                                {createCourseTitle}
+                                {title}
                             </h2>
                             <div className="accordion-body card-body">
                               {topics.length===0 ? (<></>) : 
@@ -427,6 +520,8 @@ const CreateCourse = () => {
                                       setTrigger={setTrigger}
                                       createCourseId={createCourseId}
                                       handleDelete={handleDelete}
+                                      setCurrentTopicId={setCurrentTopicId}
+                                      currentTopicId={currentTopicId}
                                       //selectedCourseId={selectedOption}
                                     />
                                   )
@@ -458,165 +553,6 @@ const CreateCourse = () => {
 
                 </div>
               </div>
-
-              <div className="accordion-item card">
-                <h2 className="accordion-header card-header" id="accSeven">
-                  <button
-                    className="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#accCollapseEight"
-                    aria-expanded="false"
-                    aria-controls="accCollapseEight"
-                  >
-                    Şahadatnama şablony
-                  </button>
-                </h2>
-                <div
-                  id="accCollapseEight"
-                  className="accordion-collapse collapse"
-                  aria-labelledby="accSeven"
-                  data-bs-parent="#tutionaccordionExamplea1"
-                >
-                  <div className="accordion-body card-body">
-                    <div className="advance-tab-button advance-tab-button-1">
-                      <ul
-                        className="rbt-default-tab-button nav nav-tabs"
-                        id="myTab"
-                        role="tablist"
-                      >
-                        <li className="nav-item" role="presentation">
-                          <a
-                            href="#"
-                            className="active"
-                            id="landscape-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#landscape"
-                            role="tab"
-                            aria-controls="landscape"
-                            aria-selected="true"
-                          >
-                            <span>Albom</span>
-                          </a>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                          <a
-                            href="#"
-                            id="portrait-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#portrait"
-                            role="tab"
-                            aria-controls="portrait"
-                            aria-selected="false"
-                          >
-                            <span>Portret</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <div className="tab-content">
-                          <div
-                            className="tab-pane fade advance-tab-content-1 active show"
-                            id="landscape"
-                            role="tabpanel"
-                            aria-labelledby="landscape-tab"
-                          >
-                            <div className="row g-5 mt--10">
-                              <div className="col-lg-4">
-                                <div className="certificate-inner rbt-image-checkbox">
-                                  <input
-                                    type="radio"
-                                    id="option1"
-                                    name="radio-group"
-                                    defaultValue="option1"
-                                  />
-                                  <label htmlFor="option1">
-                                    <Image
-                                      src={svgImg}
-                                      alt="Certificate Image"
-                                    />
-                                  </label>
-                                </div>
-                              </div>
-                              {/* {CreateCourseData &&
-                                previewImages.map((data, index) => (
-                                  <div className="col-lg-4" key={index}>
-                                    <div className="certificate-inner rbt-image-checkbox">
-                                      <input
-                                        type="radio"
-                                        id={`option${index + 2}`}
-                                        name="radio-group"
-                                        defaultValue={`option${index + 2}`}
-                                      />
-                                      <label htmlFor={`option${index + 2}`}>
-                                        <Image
-                                          src={data.img}
-                                          width={242}
-                                          height={188}
-                                          alt="Certificate Image"
-                                        />
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))} */}
-                            </div>
-                          </div>
-
-                          <div
-                            className="tab-pane fade advance-tab-content-1"
-                            id="portrait"
-                            role="tabpanel"
-                            aria-labelledby="portrait-tab"
-                          >
-                            <div className="row g-5 mt--10">
-                              <div className="col-lg-4">
-                                <div className="certificate-inner rbt-image-checkbox">
-                                  <input
-                                    type="radio"
-                                    id="optionport1"
-                                    name="radio-group"
-                                    defaultValue="optionport1"
-                                  />
-                                  <label htmlFor="optionport1">
-                                    <Image
-                                      src={svgImg2}
-                                      alt="Certificate Image"
-                                    />
-                                  </label>
-                                </div>
-                              </div>
-                              {/* {CreateCourseData &&
-                                portImages.map((data, index) => (
-                                  <div className="col-lg-4" key={index}>
-                                    <div className="certificate-inner rbt-image-checkbox">
-                                      <input
-                                        type="radio"
-                                        id={`optionport${index + 3}`}
-                                        name="radio-group"
-                                        defaultValue={`optionport${index + 3}`}
-                                      />
-                                      <label htmlFor={`optionport${index + 3}`}>
-                                        <Image
-                                          src={data.img}
-                                          width={242}
-                                          height={340}
-                                          alt="Certificate Image"
-                                        />
-                                      </label>
-                                    </div>
-                                  </div>
-                                ))} */}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div className="mt--10 row g-5">
@@ -639,9 +575,14 @@ const CreateCourse = () => {
               </Link>
             </div>
             <div className="col-lg-8">
-              <Link
+              <button
+              type="button"
+              disabled={loading}
                 className="rbt-btn btn-gradient hover-icon-reverse w-100 text-center"
                 href="#"
+                onClick={(e)=>{
+                  handleSubmit(e);
+                }}
               >
                 <span className="icon-reverse-wrapper">
                   <span className="btn-text">
@@ -654,7 +595,7 @@ const CreateCourse = () => {
                     <i className="feather-arrow-right"></i>
                   </span>
                 </span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -702,14 +643,199 @@ const CreateCourse = () => {
         //selectedCourseId={selectedOption} 
       />
       <UpdateModal />
-      {/* <LessonModal /> */}
+      <LessonModal 
+        topicId={currentTopicId}
+        setTopics={setTopics}
+        currentTopicId={currentTopicId}
+      />
       <QuizModal />
       <AssignmentModal />
-    </>
+      <BackToTopCR 
+        progressRef={progressRef}
+      />
+    </div>
   );
 };
 
 export default CreateCourse;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -986,3 +1112,163 @@ export default CreateCourse;
     </h2>
     <AdditionalForm />
   </div> */}
+
+
+  {/* sahalanma sablony <div className="accordion-item card">
+                <h2 className="accordion-header card-header" id="accSeven">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#accCollapseEight"
+                    aria-expanded="false"
+                    aria-controls="accCollapseEight"
+                  >
+                    Şahadatnama şablony
+                  </button>
+                </h2>
+                <div
+                  id="accCollapseEight"
+                  className="accordion-collapse collapse"
+                  aria-labelledby="accSeven"
+                  data-bs-parent="#tutionaccordionExamplea1"
+                >
+                  <div className="accordion-body card-body">
+                    <div className="advance-tab-button advance-tab-button-1">
+                      <ul
+                        className="rbt-default-tab-button nav nav-tabs"
+                        id="myTab"
+                        role="tablist"
+                      >
+                        <li className="nav-item" role="presentation">
+                          <a
+                            href="#"
+                            className="active"
+                            id="landscape-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#landscape"
+                            role="tab"
+                            aria-controls="landscape"
+                            aria-selected="true"
+                          >
+                            <span>Albom</span>
+                          </a>
+                        </li>
+                        <li className="nav-item" role="presentation">
+                          <a
+                            href="#"
+                            id="portrait-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#portrait"
+                            role="tab"
+                            aria-controls="portrait"
+                            aria-selected="false"
+                          >
+                            <span>Portret</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-lg-12">
+                        <div className="tab-content">
+                          <div
+                            className="tab-pane fade advance-tab-content-1 active show"
+                            id="landscape"
+                            role="tabpanel"
+                            aria-labelledby="landscape-tab"
+                          >
+                            <div className="row g-5 mt--10">
+                              <div className="col-lg-4">
+                                <div className="certificate-inner rbt-image-checkbox">
+                                  <input
+                                    type="radio"
+                                    id="option1"
+                                    name="radio-group"
+                                    defaultValue="option1"
+                                  />
+                                  <label htmlFor="option1">
+                                    <Image
+                                      src={svgImg}
+                                      alt="Certificate Image"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                              {CreateCourseData &&
+                                previewImages.map((data, index) => (
+                                  <div className="col-lg-4" key={index}>
+                                    <div className="certificate-inner rbt-image-checkbox">
+                                      <input
+                                        type="radio"
+                                        id={`option${index + 2}`}
+                                        name="radio-group"
+                                        defaultValue={`option${index + 2}`}
+                                      />
+                                      <label htmlFor={`option${index + 2}`}>
+                                        <Image
+                                          src={data.img}
+                                          width={242}
+                                          height={188}
+                                          alt="Certificate Image"
+                                        />
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+
+                          <div
+                            className="tab-pane fade advance-tab-content-1"
+                            id="portrait"
+                            role="tabpanel"
+                            aria-labelledby="portrait-tab"
+                          >
+                            <div className="row g-5 mt--10">
+                              <div className="col-lg-4">
+                                <div className="certificate-inner rbt-image-checkbox">
+                                  <input
+                                    type="radio"
+                                    id="optionport1"
+                                    name="radio-group"
+                                    defaultValue="optionport1"
+                                  />
+                                  <label htmlFor="optionport1">
+                                    <Image
+                                      src={svgImg2}
+                                      alt="Certificate Image"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                              {CreateCourseData &&
+                                portImages.map((data, index) => (
+                                  <div className="col-lg-4" key={index}>
+                                    <div className="certificate-inner rbt-image-checkbox">
+                                      <input
+                                        type="radio"
+                                        id={`optionport${index + 3}`}
+                                        name="radio-group"
+                                        defaultValue={`optionport${index + 3}`}
+                                      />
+                                      <label htmlFor={`optionport${index + 3}`}>
+                                        <Image
+                                          src={data.img}
+                                          width={242}
+                                          height={340}
+                                          alt="Certificate Image"
+                                        />
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> */}

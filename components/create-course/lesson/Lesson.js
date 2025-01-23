@@ -38,10 +38,9 @@ const Lesson = ({
   id,
   topic,
   setTrigger,
-  handleDelete
-  //selectedCourseId
-
-  
+  handleDelete,
+  setCurrentTopicId,
+  currentTopicId
 }) => {
   
   const [courseList, setCourseList] = useState(CourseData.courseDetails);
@@ -58,7 +57,6 @@ const Lesson = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-  console.log(topic?.id);
 
   function handleDragEnd(event) {
     const { active, over } = event;
@@ -77,10 +75,12 @@ const Lesson = ({
     return null;
   }
 
-  const deleteLesson = (ind) => {
+  
+
+  const deleteLesson = (ind, topicId) => {
     setTopics((prevTopics) => {
       
-      const topicIndex = prevTopics.findIndex((topic) => topic.id === topic?.id);
+      const topicIndex = prevTopics.findIndex((topic) => topic.id === topicId);
     
       
       if (topicIndex !== -1) {
@@ -181,6 +181,7 @@ const Lesson = ({
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#Lesson"
+                  onClick={() => setCurrentTopicId(topic?.id)}
                 >
                   <span className="icon-reverse-wrapper">
                     <span className="btn-text">Lesson</span>
@@ -251,11 +252,6 @@ const Lesson = ({
           </div>
         </div>
       </div>
-      <LessonModal 
-        topicId={topic?.id}
-        topic={topic}
-        setTopics={setTopics}
-      />
     </>
   );
 };
