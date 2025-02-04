@@ -2,6 +2,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import Link from "next/link";
 import {useState} from "react";
 import {Ripple} from "react-css-spinners";
+import axiosInstance_user from "@/utils/axiosInstance_user";
 const Login = () => {
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
@@ -32,7 +33,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axiosInstance.post(`http://216.250.12.100:5000/api/login/`, requestData);
+      const response = await axiosInstance_user.post(`/login/`, requestData);
 
       e.target.reset();
 
@@ -70,7 +71,7 @@ const Login = () => {
       }
 
       try {
-        const response = await axiosInstance.post(`http://216.250.12.100:5000/api/register/`, registerData);
+        const response = await axiosInstance_user.post(`/register/`, registerData);
         console.log(response.data);
         e.target.reset();
       } catch (error) {

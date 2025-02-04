@@ -40,7 +40,7 @@ const SingleCourse = ({ getParams }) => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(`/api/courses/${slug}/`);
+        const response = await axiosInstance.get(`/courses/${slug}/`);
         setCourse(response.data);
         setLoading(false);
       } catch (err) {

@@ -12,12 +12,12 @@ const CopyRight = () => {
               <p className="rbt-link-hover text-center text-lg-start">
                 Copyright © 2024
                 <Link href="https://themeforest.net/user/rbt-themes">
-                  Rainbow-Themes.
+                  <span> </span> emugallym <span> </span>
                 </Link>
-                All Rights Reserved
+               Ähli hukuklar goralan
               </p>
             </div>
-            <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-12">
+            {/* <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-12">
               <ul className="copyright-link rbt-link-hover justify-content-center justify-content-lg-end mt_sm--10 mt_md--10">
                 <li>
                   <Link href="#">Terms of service</Link>
@@ -32,7 +32,7 @@ const CopyRight = () => {
                   <Link href="#">Login & Register</Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

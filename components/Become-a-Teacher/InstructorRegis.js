@@ -46,7 +46,7 @@ const InstructorRegistration = () => {
   useEffect(()=> {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/api/profession");
+        const response = await axiosInstance.get("/profession");
         setProfessions(response.data);
       } catch (err) {
         console.error(err);
@@ -95,11 +95,11 @@ const InstructorRegistration = () => {
     formData.append("type", "instructor");
     formData.append("order", 1000000); //duzetmeli
 
-    const url="http://216.250.12.100:5000/api/user/";
+    const url="/user/";
 
     try {
       
-      const response = await axios.post(url, formData, {
+      const response = await axiosInstance.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -132,13 +132,13 @@ const InstructorRegistration = () => {
       )}
       <div className="row pt--60 g-5">
         <div className="col-lg-4">
-          <div className="thumbnail">
+          {/* <div className="thumbnail">
             <Image
               className="radius-10 w-100"
               src={img1}
               alt="Corporate Template"
             />
-          </div>
+          </div> duzetmeli */}
         </div>
 
         <div className="col-lg-8">

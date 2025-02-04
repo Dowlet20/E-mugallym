@@ -14,7 +14,7 @@ const TeamThree = () => {
   useEffect(()=>{
     const fetchData =async () => {
       try {
-        const response = await axiosInstance.get("/api/user");
+        const response = await axiosInstance.get("/user");
         setUsers(response.data);
         setLoading(false);
       }

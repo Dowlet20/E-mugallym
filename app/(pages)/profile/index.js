@@ -35,10 +35,10 @@ const SingleProfile = ({ getParams }) => {
     const fetchData = async () => {
       try {
         
-        const response_user = await axiosInstance_user.get(`/api/user/${postId}`);
+        const response_user = await axiosInstance_user.get(`/user/${postId}`);
         setUser(response_user.data);
 
-        const response = await axiosInstance.get(`/api/courses/?user=${postId}`);
+        const response = await axiosInstance.get(`/courses/?user=${postId}`);
         setCourses(response.data);
         setLoading(false);
 

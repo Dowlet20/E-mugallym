@@ -45,7 +45,7 @@ const BasicPlan = ({ item, parentClass, styleType, toggle }) => {
                   : ""
               }`}
             >
-              ${yearlyAmount}
+              {yearlyAmount} TMT
             </span>
             <span
               className={`duration ms-1 ${
@@ -73,7 +73,7 @@ const BasicPlan = ({ item, parentClass, styleType, toggle }) => {
                   : ""
               }`}
             >
-              ${monthlyAmount}.00
+              {monthlyAmount}.00 TMT
             </span>
             <span
               className={`duration ms-1 ${

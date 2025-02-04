@@ -5,15 +5,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BackToTopCR from "./BackToTopCR";
 import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import Select from "react-select";
+// import Select from "react-select";
+// import Image from "next/image";
 
 
-import CreateCourseData from "../../data/createCourse.json";
+// import CreateCourseData from "../../data/createCourse.json";
 
-import svgImg from "../../public/images/icons/certificate-none.svg";
-import svgImg2 from "../../public/images/icons/certificate-none-portrait.svg";
+// import svgImg from "../../public/images/icons/certificate-none.svg";
+// import svgImg2 from "../../public/images/icons/certificate-none-portrait.svg";
 
 import InfoForm from "./InfoForm";
 import TopicModal from "./QuizModals/TopicModal";
@@ -91,7 +91,7 @@ const CreateCourse = () => {
   
     try {
       const response = await axiosInstance.post(
-        "/api/lesson/", 
+        "/lesson/", 
         formData, 
         {
           headers: {
@@ -124,7 +124,7 @@ const CreateCourse = () => {
     try {
 
       if (formData?.title && formData?.course) {
-        const response = await axiosInstance.post("/api/topics/", formData, {
+        const response = await axiosInstance.post("/topics/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -267,7 +267,7 @@ const CreateCourse = () => {
     
     try {
       const response = await axiosInstance.post(
-        "/api/courses/", 
+        "/courses/", 
         formData, 
         {
           headers: {
@@ -322,11 +322,11 @@ const CreateCourse = () => {
   useEffect(()=> {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/api/category/");
+        const response = await axiosInstance.get("/category/");
         setCategories(response.data);
-        const response_level = await axiosInstance.get("/api/level/");
+        const response_level = await axiosInstance.get("/level/");
         setLevels(response_level.data);
-        const response_lang = await axiosInstance.get("/api/language/");
+        const response_lang = await axiosInstance.get("/language/");
         setLanguages(response_lang.data);
       } catch (err) {
         console.error(err);

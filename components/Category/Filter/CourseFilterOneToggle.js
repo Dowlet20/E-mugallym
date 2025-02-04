@@ -34,27 +34,25 @@ const CourseFilterOneToggle = ({ course, start, end }) => {
   return (
     <>
       <div
-        className={`rbt-course-grid-column ${
-          !toggle ? "active-list-view" : ""
-        }`}
+        className={`rbt-course-grid-column ${!toggle ? "active-list-view" : ""
+          }`}
       >
         {course.slice(start, end).map((data, index) => (
           <div className="course-grid-3" key={index}>
             <div
-              className={`rbt-card variation-01 rbt-hover ${
-                !toggle ? "card-list-2" : ""
-              }`}
+              className={`rbt-card variation-01 rbt-hover ${!toggle ? "card-list-2" : ""
+                }`}
             >
               <div className="rbt-card-img">
                 <Link href={`/course-details/${data?.slug}`}>
-                <div style={{ height: '244px', overflow: 'hidden', position: 'relative' }}>
-                  <Image
-                    src={data?.thumbnail ? data?.thumbnail : "/images/course/course-01.jpg"}
-                    alt="Card image"
-                    layout="fill" 
-                    objectFit="cover" 
-                  />
-              </div>
+                  <div style={{ height: '244px', overflow: 'hidden', position: 'relative' }}>
+                    <Image
+                      src={data?.thumbnail ? data?.thumbnail : "/images/course/course-01.jpg"}
+                      alt="Card image"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
                   <div className="rbt-badge-3 bg-white">
                     <span>-{data?.discount}%</span>
                     <span>Off</span>
@@ -92,7 +90,7 @@ const CourseFilterOneToggle = ({ course, start, end }) => {
                     WebkitLineClamp: 2, // Limit to 2 lines
                     textOverflow: 'ellipsis', // Show ellipsis when text overflows
                     lineHeight: '1.5em', // Set line height for proper spacing
-                }}>
+                  }}>
                     <Link href={`/course-details/${data?.slug}`}>
                       {data?.title}
                     </Link>
@@ -120,13 +118,13 @@ const CourseFilterOneToggle = ({ course, start, end }) => {
                   lineHeight: '1.5em', // Set line height for proper spacing
                 }}>
                   {data?.short_description}
-                    
+
                 </div>
                 <div className="rbt-author-meta mb--10">
                   <div className="rbt-avater">
                     <Link href={`/profile/${data?.user?.id}`}>
                       <Image
-                        src={data?.user?.img ? data?.user?.img : "/images/client/avatar-02.png"} 
+                        src={data?.user?.img ? data?.user?.img : "/images/client/avatar-02.png"}
                         // src={"/images/client/avatar-02.png"}
                         width={33}
                         height={33}
@@ -136,20 +134,20 @@ const CourseFilterOneToggle = ({ course, start, end }) => {
                   </div>
                   <div className="rbt-author-info">
                     <Link href={`/profile/${data?.user?.id}`}>
-                      {data?.user?.first_name + " " + data?.user?.last_name }
+                      {data?.user?.first_name + " " + data?.user?.last_name}
                     </Link>
                   </div>
                 </div>
                 <div className="rbt-card-bottom">
                   <div className="rbt-price">
                     <span className="current-price">{data?.price} TMT</span>
-                    <span className="off-price">{parseInt(data?.price+data?.price*data?.discount/100,10)} TMT</span>
+                    <span className="off-price">{parseInt(data?.price + data?.price * data?.discount / 100, 10)} TMT</span>
                   </div>
                   <Link
                     className="rbt-btn-link"
                     href={`/course-details/${data?.slug}`}
                   >
-                    Doly aç<i className="feather-arrow-right"></i>
+                    Giňişleýin<i className="feather-arrow-right"></i>
                   </Link>
                 </div>
               </div>

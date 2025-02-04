@@ -57,7 +57,7 @@ const Shop = () => {
     const fetchData = async () => {
       try {
 
-        const url = '/api/books/';
+        const url = '/books/';
         const response = await axiosInstance.get(url);
         setProducts(response.data);
         setLoading(false);

@@ -12,7 +12,7 @@ const LessonSidebar = ({course_slug, lesson_slug, topic_id}) => {
     setActiveTab(topic_id)
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(`/api/topics/?course__slug=${course_slug}`);
+        const response = await axiosInstance.get(`/topics/?course__slug=${course_slug}`);
         setTopics(response.data);
       } catch (err) {
         console.log(err.message);

@@ -15,14 +15,14 @@
         },
         {
           "id": 2,
-          "image": "/images/about/about-09.jpg",
+          "image": "/images/about/about-08.jpg",
           "class": "d-none d-xl-block",
           "width": 308,
           "height": 250
         },
         {
           "id": 3,
-          "image": "/images/about/about-08.jpg",
+          "image": "/images/about/about-09.jpg",
           "class": "d-none d-md-block",
           "width": 405,
           "height": 490

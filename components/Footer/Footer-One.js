@@ -66,7 +66,7 @@ const FooterOne = ({ bgColor }) => {
                           href="#"
                         >
                           <div className="icon-reverse-wrapper">
-                            <span className="btn-text">Biz bilen habarlaş</span>
+                            <span className="btn-text">Biz bilen habarlaşyň</span>
                             <span className="btn-icon">
                               <i className="feather-arrow-right"></i>
                             </span>
@@ -95,7 +95,7 @@ const FooterOne = ({ bgColor }) => {
                       <h5 className="ft-title">Habarlaşmak üçin</h5>
                       <ul className="ft-link">
                         <li>
-                          <span>Phone: </span>
+                          <span>Faks: </span>
                           <Link href="#">{footer.phone}</Link>
                         </li>
                         <li>
@@ -107,15 +107,13 @@ const FooterOne = ({ bgColor }) => {
                       </ul>
 
                       <form className="newsletter-form mt--20" action="#">
-                        <h6 className="w-600">Bellik</h6>
                         <p className="description">{footer.descriptionTwo}</p>
 
                         <div className="form-group right-icon icon-email mb--20">
-                          {/* <label htmlFor="email">Enter Your Email Here</label> */}
                           <input
                             id="email"
                             type="email"
-                            placeholder="Email addressiňiz"
+                            placeholder="E-poçtaňyzy giriziň"
                           />
                         </div>
 
@@ -124,7 +122,7 @@ const FooterOne = ({ bgColor }) => {
                             className="rbt-btn rbt-switch-btn btn-gradient radius-round btn-sm"
                             type="submit"
                           >
-                            <span data-text="Submit Now">Giriz</span>
+                            <span data-text="Submit Now">Ugradyň</span>
                           </button>
                         </div>
                       </form>
@@ -135,7 +133,7 @@ const FooterOne = ({ bgColor }) => {
           </div>
         </div>
 
-        {/* <CopyRight /> */}
+        <CopyRight />
       </footer>
     </>
   );

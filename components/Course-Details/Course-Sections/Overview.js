@@ -9,9 +9,8 @@ const Overview = ({ course }) => {
   return (
     <>
       <div
-        className={`rbt-course-feature-box overview-wrapper rbt-shadow-box mt--30 has-show-more ${
-          toggle ? "active" : ""
-        }`}
+        className={`rbt-course-feature-box overview-wrapper rbt-shadow-box mt--30 has-show-more ${toggle ? "active" : ""
+          }`}
         id="overview"
       >
         <div className="rbt-course-feature-inner has-show-more-inner-content">
@@ -49,7 +48,7 @@ const Overview = ({ course }) => {
           className={`rbt-show-more-btn ${toggle ? "active" : ""}`}
           onClick={() => setToggle(!toggle)}
         >
-          Doly aç
+          Giňişleýin
         </div>
       </div>
     </>

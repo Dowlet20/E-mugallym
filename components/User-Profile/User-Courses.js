@@ -50,7 +50,7 @@ const UserCourses = ({ courses }) => {
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
                   </div>
-                  <span className="rating-count"> 
+                  <span className="rating-count">
                     {/* ({data.rating} duzetmeli Reviews) */} 12 teswir
                   </span>
                 </div>
@@ -107,7 +107,7 @@ const UserCourses = ({ courses }) => {
                 <div className="rbt-avater">
                   <Link href={`/profile/${course?.user?.id}`}>
                     <Image
-                      src={course?.user?.img ?  course?.user?.img : "/images/course/course-online-01.jpg"}
+                      src={course?.user?.img ? course?.user?.img : "/images/course/course-online-01.jpg"}
                       width={33}
                       height={33}
                       alt="Sophia Jaymes"
@@ -123,14 +123,14 @@ const UserCourses = ({ courses }) => {
               <div className="rbt-card-bottom">
                 <div className="rbt-price">
                   <span className="current-price">{course?.price} TMT</span>
-                  <span className="off-price">{course?.price+course?.price*course?.discount/100} TMT</span>
+                  <span className="off-price">{course?.price + course?.price * course?.discount / 100} TMT</span>
                 </div>
                 <Link
                   className="rbt-btn-link"
                   href={`/course-details/${course?.slug}`}
                 >
-                  Doly aç
-                <i className="feather-arrow-right"></i>
+                  Giňişleýin
+                  <i className="feather-arrow-right"></i>
                 </Link>
               </div>
             </div>

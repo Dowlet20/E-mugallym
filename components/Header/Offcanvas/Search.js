@@ -36,7 +36,7 @@ const Search = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url =`/api/courses/${slug ? `?category_slug=${slug}` : ""}${slug && paid ? `&paid=${paid}` : !slug && paid ? `?paid=${paid}` : ""}${(slug || paid) && user ? `&user=${user}` : !slug && !paid && user ? `?user=${user}` : ""}${(slug || paid || user) && searchapi ? `&search=${searchapi}` : !slug && !paid && !user && searchapi ? `?search=${searchapi}` : ""}${(slug || paid || user || searchapi) && ordering ? `&ordering=${ordering}` : !slug && !paid && !user && !searchapi && ordering ? `?ordering${ordering}` : ""}`;
+        const url =`/courses/${slug ? `?category_slug=${slug}` : ""}${slug && paid ? `&paid=${paid}` : !slug && paid ? `?paid=${paid}` : ""}${(slug || paid) && user ? `&user=${user}` : !slug && !paid && user ? `?user=${user}` : ""}${(slug || paid || user) && searchapi ? `&search=${searchapi}` : !slug && !paid && !user && searchapi ? `?search=${searchapi}` : ""}${(slug || paid || user || searchapi) && ordering ? `&ordering=${ordering}` : !slug && !paid && !user && !searchapi && ordering ? `?ordering${ordering}` : ""}`;
         console.log(url);
         const response = await axiosInstance.get(url);
         const allCourse = response.data;

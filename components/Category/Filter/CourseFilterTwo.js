@@ -9,14 +9,14 @@ const CourseFilterTwo = () => {
   const [selectedValues, setSelectedValues] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [paid, setPaid] = useState(true);
-  
 
-  useEffect(()=> {
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/api/category/");
+        const response = await axiosInstance.get("/category/");
         setCategories(response.data);
-        const response_level = await axiosInstance.get("/api/level/");
+        const response_level = await axiosInstance.get("/level/");
         setLevels(response_level.data);
       } catch (err) {
         console.error(err);
@@ -27,7 +27,7 @@ const CourseFilterTwo = () => {
 
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
-    
+
     if (event.target.checked) {
       setSelectedValues((prevValues) => [...prevValues, value]);
     } else {
@@ -39,7 +39,7 @@ const CourseFilterTwo = () => {
 
   const handleCheckboxChangeLevel = (event) => {
     const value = event.target.value;
-    
+
     if (event.target.checked) {
       setSelectedLevels((prevValues) => [...prevValues, value]);
     } else {
@@ -58,14 +58,13 @@ const CourseFilterTwo = () => {
           <div className="row g-5">
             <div className="col-lg-4 col-md-4 col-sm-6 col-12">
               <div
-                className={`rbt-single-widget rbt-widget-categories ${
-                  show ? "has-show-more" : ""
-                }`}
+                className={`rbt-single-widget rbt-widget-categories ${show ? "has-show-more" : ""
+                  }`}
               >
                 <div className="inner">
                   <h4 className="rbt-widget-title-2">Kategoriýalar</h4>
                   <ul className="rbt-sidebar-list-wrapper categories-list-check has-show-more-inner-content">
-                  {categories?.length===0 ? [] : 
+                    {categories?.length === 0 ? [] :
                       categories?.map((category, index) => {
                         return (
                           <li className="rbt-check-group" key={index}>
@@ -74,11 +73,11 @@ const CourseFilterTwo = () => {
                               type="checkbox"
                               id={`checkbox${category?.id}`}
                               style={{
-                                  width: '3.5em',  
-                                  height: '3.5em', 
-                                  border: '2px solid #007bff',
-                                  borderRadius: '5px',
-                                  transition: 'background-color 0.3s, border-color 0.3s',
+                                width: '3.5em',
+                                height: '3.5em',
+                                border: '2px solid #007bff',
+                                borderRadius: '5px',
+                                transition: 'background-color 0.3s, border-color 0.3s',
                               }}
                               value={category?.slug}
                               onChange={handleCheckboxChange}
@@ -105,12 +104,12 @@ const CourseFilterTwo = () => {
                   className={`rbt-show-more-btn ${show ? "" : "active"}`}
                   onClick={() => setShow(!show)}
                 >
-                  Doly aç
+                  Giňişleýin
                 </div>
               </div>
             </div>
 
-            
+
 
             <div className="col-lg-4 col-md-4 col-sm-6 col-12">
               <div className="rbt-single-widget rbt-widget-prices">
@@ -124,7 +123,7 @@ const CourseFilterTwo = () => {
                         name="prices-list-1"
                       />
                       <label htmlFor="prices-list-1">
-                        Hemmesi 
+                        Hemmesi
                         {/* <span className="rbt-lable count">15</span> */}
                       </label>
                     </li>
@@ -135,7 +134,7 @@ const CourseFilterTwo = () => {
                         name="prices-list-2"
                       />
                       <label htmlFor="prices-list-2">
-                        Mugt 
+                        Mugt
                         {/* <span className="rbt-lable count">0</span> */}
                       </label>
                     </li>
@@ -172,37 +171,37 @@ const CourseFilterTwo = () => {
                       </label>
                     </li>
                     {
-                      levels.length ===0 ? [] : levels.map(
-                        (level,index) => {
+                      levels.length === 0 ? [] : levels.map(
+                        (level, index) => {
                           return (
-                          <li className="rbt-check-group" key={index}>
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              id={`check${level?.id}`}
-                              // style={{
-                              //     width: '3.5em',  
-                              //     height: '3.5em', 
-                              //     border: '2px solid #007bff',
-                              //     borderRadius: '5px',
-                              //     transition: 'background-color 0.3s, border-color 0.3s',
-                              // }}
-                              value={level?.slug}
-                              onChange={handleCheckboxChangeLevel}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor={`check${level?.id}`} //duzetmeli
+                            <li className="rbt-check-group" key={index}>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`check${level?.id}`}
+                                // style={{
+                                //     width: '3.5em',  
+                                //     height: '3.5em', 
+                                //     border: '2px solid #007bff',
+                                //     borderRadius: '5px',
+                                //     transition: 'background-color 0.3s, border-color 0.3s',
+                                // }}
+                                value={level?.slug}
+                                onChange={handleCheckboxChangeLevel}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`check${level?.id}`} //duzetmeli
                               // style={{
                               //   fontSize: '16px',
                               //   color: '#333',
                               //   marginLeft: '10px',
                               //   cursor: 'pointer',
                               // }}
-                            >
-                              {level?.title}
-                            </label>
-                          </li>        
+                              >
+                                {level?.title}
+                              </label>
+                            </li>
                           )
                         }
                       )
@@ -307,7 +306,7 @@ export default CourseFilterTwo;
               </div>
             </div> */}
 
-            {/* <div className="col-lg-2 col-md-4 col-sm-6 col-12">
+{/* <div className="col-lg-2 col-md-4 col-sm-6 col-12">
               <div className="rbt-single-widget rbt-widget-instructor">
                 <div className="inner">
                   <h4 className="rbt-widget-title-2">Instructors</h4>
@@ -358,7 +357,7 @@ export default CourseFilterTwo;
               </div>
             </div> */}
 
-            {/* <div className="col-lg-2 col-md-4 col-sm-6 col-12">
+{/* <div className="col-lg-2 col-md-4 col-sm-6 col-12">
               <div className="rbt-single-widget rbt-widget-features">
                 <div className="inner">
                   <h4 className="rbt-widget-title-2">Features</h4>

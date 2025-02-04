@@ -29,7 +29,7 @@ const LessonPage = () => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(`/api/lesson/${lesson_slug}`);
+        const response = await axiosInstance.get(`/lesson/${lesson_slug}`);
         setLesson(response.data);
         setLesson_title(response.data?.title);
         setLoading(false);
@@ -69,7 +69,7 @@ const LessonPage = () => {
             <div className="inner">
               <div className="plyr__video-embed rbtplayer">
               <ReactPlayer
-                url={lesson_slug ? `${base_URL}api/lesson/${lesson_slug}/material` : "https://www.youtube.com/embed/qKzhrXqT6oE"}
+                url={lesson_slug ? `${base_URL}lesson/${lesson_slug}/material` : "https://www.youtube.com/embed/qKzhrXqT6oE"}
                 width="100%"
                 height="100%"
                 playing={false} // Start playing immediately

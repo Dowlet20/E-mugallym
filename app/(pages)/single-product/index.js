@@ -36,7 +36,7 @@ const SingleProductPage = ({ getParams }) => {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const url = `/api/books/${productId}`
+        const url = `/books/${productId}`
         const response = await axiosInstance.get(url);
         setBook(response.data);
         setLoading(false);

@@ -64,13 +64,13 @@ const Course = ({ title, tag }) => {
                                 <tbody>
                                   <tr>
                                     <th>Term 1-6</th>
-                                    <td>${item.cost}</td>
+                                    <td>{item.cost} TMT</td>
                                   </tr>
                                 </tbody>
                                 <tfoot>
                                   <tr>
                                     <th>Total</th>
-                                    <th>${item.cost}</th>
+                                    <th>{item.cost} TMT</th>
                                   </tr>
                                 </tfoot>
                               </table>

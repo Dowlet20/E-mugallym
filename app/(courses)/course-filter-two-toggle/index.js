@@ -46,7 +46,7 @@ const CourseFilteTwoTogglePage = () => {
     const fetchData = async () => {
       try {
         ///api/courses/?search=asd&ordering=1&category=slug_1,slug_2&paid=true&user=20
-        const url =`/api/courses/${slug ? `?category_slug=${slug}` : ""}${slug && paid ? `&paid=${paid}` : !slug && paid ? `?paid=${paid}` : ""}${(slug || paid) && user ? `&user=${user}` : !slug && !paid && user ? `?user=${user}` : ""}${(slug || paid || user) && search ? `&search=${search}` : !slug && !paid && !user && search ? `?search=${search}` : ""}${(slug || paid || user || search) && ordering ? `&ordering=${ordering}` : !slug && !paid && !user && !search && ordering ? `?ordering=${ordering}` : ""}`;
+        const url =`/courses/${slug ? `?category_slug=${slug}` : ""}${slug && paid ? `&paid=${paid}` : !slug && paid ? `?paid=${paid}` : ""}${(slug || paid) && user ? `&user=${user}` : !slug && !paid && user ? `?user=${user}` : ""}${(slug || paid || user) && search ? `&search=${search}` : !slug && !paid && !user && search ? `?search=${search}` : ""}${(slug || paid || user || search) && ordering ? `&ordering=${ordering}` : !slug && !paid && !user && !search && ordering ? `?ordering=${ordering}` : ""}`;
         const response = await axiosInstance.get(url);
         const allCourse = response.data;
         setCourse(allCourse);
